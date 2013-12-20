@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "JsonFSharp", "JsonFSharp\JsonFSharp.fsproj", "{523A1A9F-30E1-4471-8EC5-2BA2535A53F3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "JsonFSharp.Specs", "JsonFSharp.Specs\JsonFSharp.Specs.fsproj", "{DA13C60A-A9F7-4582-A727-5DF82AF8FAEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{523A1A9F-30E1-4471-8EC5-2BA2535A53F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{523A1A9F-30E1-4471-8EC5-2BA2535A53F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{523A1A9F-30E1-4471-8EC5-2BA2535A53F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA13C60A-A9F7-4582-A727-5DF82AF8FAEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA13C60A-A9F7-4582-A727-5DF82AF8FAEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA13C60A-A9F7-4582-A727-5DF82AF8FAEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA13C60A-A9F7-4582-A727-5DF82AF8FAEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
