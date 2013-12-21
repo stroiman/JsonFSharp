@@ -10,5 +10,11 @@ let specs =
             match actual with
             | Success _ -> failwith "Expected fail"
             | Failure _ -> ()
+
+        it "handles invalid input in array" <| fun () ->
+            let actual = "[invalid]" |> JsonParser.parse
+            match actual with
+            | Success _ -> failwith "Expected fail"
+            | Failure _ -> ()
     ]
 
