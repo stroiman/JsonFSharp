@@ -24,6 +24,8 @@ rule token = parse
 | "null"        { NULL }
 | '['           { LBRAC }
 | ']'           { RBRAC }
+| '{'           { LBRACE }
+| '}'           { RBRACE }
 | ','           { COMMA }
 | _
                 {

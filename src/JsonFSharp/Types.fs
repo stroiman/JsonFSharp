@@ -6,6 +6,7 @@ type JsonValue =
     | JsonBool of bool
     | JsonNull
     | JsonArray of JsonValue list
+    | JsonObject of Map<string,JsonValue>
 
 type ParseResult =
     | Success of JsonValue

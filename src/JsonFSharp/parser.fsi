@@ -4,6 +4,8 @@ type token =
   | EOF
   | LBRAC
   | RBRAC
+  | LBRACE
+  | RBRACE
   | COMMA
   | NULL
   | BOOL of (bool)
@@ -14,6 +16,8 @@ type tokenId =
     | TOKEN_EOF
     | TOKEN_LBRAC
     | TOKEN_RBRAC
+    | TOKEN_LBRACE
+    | TOKEN_RBRACE
     | TOKEN_COMMA
     | TOKEN_NULL
     | TOKEN_BOOL
