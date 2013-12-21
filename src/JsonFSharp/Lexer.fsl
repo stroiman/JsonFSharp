@@ -22,6 +22,8 @@ rule token = parse
 | "true"        { BOOL(true) }
 | "false"       { BOOL(false) }
 | "null"        { NULL }
+| '['           { LBRAC }
+| ']'           { RBRAC }
 | _
                 {
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",

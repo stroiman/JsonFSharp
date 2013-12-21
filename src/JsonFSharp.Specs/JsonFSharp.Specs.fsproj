@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="PrimitiveTypesSpec.fs" />
+    <Compile Include="ArraySpecs.fs" />
     <Compile Include="ErrorHandlingSpecs.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />

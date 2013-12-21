@@ -5,6 +5,7 @@ type JsonValue =
     | JsonNumber of double
     | JsonBool of bool
     | JsonNull
+    | JsonArray of JsonValue list
 
 type ParseResult =
     | Success of JsonValue

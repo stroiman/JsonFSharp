@@ -2,6 +2,8 @@
 module JsonFSharp.Parsers
 type token = 
   | EOF
+  | LBRAC
+  | RBRAC
   | NULL
   | BOOL of (bool)
   | EXCEPTION of (string)
@@ -9,6 +11,8 @@ type token =
   | STRING of (string)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_LBRAC
+    | TOKEN_RBRAC
     | TOKEN_NULL
     | TOKEN_BOOL
     | TOKEN_EXCEPTION

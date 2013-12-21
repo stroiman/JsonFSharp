@@ -2,7 +2,8 @@
 
 let summary =
     [ PrimitiveTypesSpec.specs;
-      ErrorHandlingSpecs.specs ]
+      ErrorHandlingSpecs.specs;
+      ArraySpecs.specs ]
     |> List.map run
     |> List.map getSummary
     |> List.sum
