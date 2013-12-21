@@ -24,4 +24,14 @@ let specs =
             """{"a":"value a","b":"value b"}"""
             |> JsonParser.parse
             |> shouldEqualObject expected
+
+        it "ignores white space" <| fun () ->
+            let expected = [
+                ("a", JsonString("value a"))
+                ("b", JsonString("value b"))]
+            """{ "a" : "value a",
+                 "b" : "value b"
+               }"""
+            |> JsonParser.parse
+            |> shouldEqualObject expected
     ]

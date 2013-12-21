@@ -9,7 +9,7 @@ let lexeme = Lexing.LexBuffer<_>.LexemeString
 }
 let hexagonal = ['a'-'f''A'-'F''0'-'9']
 let digit = ['0'-'9']
-let whitespace = [' ' '\t' ]
+let whitespace = [' ' '\t' ]*
 let newline = ('\n' | '\r' '\n')
 let unicode = hexagonal hexagonal hexagonal hexagonal 
 let exponential = ['e' 'E'] digit+
@@ -28,6 +28,8 @@ rule token = parse
 | '}'           { RBRACE }
 | ','           { COMMA }
 | ':'           { COLON }
+| newline       { token lexbuf }
+| whitespace    { token lexbuf }
 | _
                 {
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
