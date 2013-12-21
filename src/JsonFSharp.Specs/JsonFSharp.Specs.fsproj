@@ -48,6 +48,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers.fs" />
     <Compile Include="PrimitiveTypesSpec.fs" />
     <Compile Include="ErrorHandlingSpecs.fs" />
     <Compile Include="Program.fs" />
