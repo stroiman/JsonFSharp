@@ -49,7 +49,7 @@ and _fslex_token  _fslex_state lexbuf =
                                    let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
                                                                            lexbuf.EndPos.Line + 1,
                                                                            lexbuf.EndPos.Column)
-                                   failwith exceptionString
+                                   EXCEPTION exceptionString
                                
 # 54 "Lexer.fs"
           )

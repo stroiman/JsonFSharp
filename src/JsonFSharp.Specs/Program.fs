@@ -1,7 +1,8 @@
 ﻿open FSpec.Core.DslV2
 
 let summary =
-    [ PrimitiveTypesSpec.specs ]
+    [ PrimitiveTypesSpec.specs;
+      ErrorHandlingSpecs.specs ]
     |> List.map run
     |> List.map getSummary
     |> List.sum

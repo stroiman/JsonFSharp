@@ -17,7 +17,7 @@ rule token = parse
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
                                                             lexbuf.EndPos.Line + 1,
                                                             lexbuf.EndPos.Column)
-                    failwith exceptionString
+                    EXCEPTION exceptionString
                 } 
 | eof			{ EOF }
 and parseString = parse

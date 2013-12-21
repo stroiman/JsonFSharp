@@ -2,9 +2,11 @@
 module JsonFSharp.Parsers
 type token = 
   | EOF
+  | EXCEPTION of (string)
   | STRING of (string)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_EXCEPTION
     | TOKEN_STRING
     | TOKEN_end_of_input
     | TOKEN_error

@@ -8,7 +8,7 @@ let specs =
         describe "string parsing" [
             it "handles simple strings" <| fun () ->
                 let actual = "\"dummy\"" |> JsonParser.parse
-                let expected = JsonString "dummy"
+                let expected = Success (JsonString "dummy")
                 actual |> should equal expected
         ]
     ]

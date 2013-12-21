@@ -4,8 +4,11 @@ open JsonFSharp
 
 %start start
 %token <string> STRING
+%token <string> EXCEPTION
 %token EOF
 %type < JsonFSharp.ParseResult > start
 %%
 
-start: STRING EOF { Success (JsonString $1) }
+start: 
+    | STRING EOF { Success (JsonString $1) }
+    | EXCEPTION { Failure $1 }
