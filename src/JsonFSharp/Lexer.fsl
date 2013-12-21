@@ -1,10 +1,13 @@
 ﻿{
 module JsonFSharp.Lexer
+open System
+open System.Globalization
 open JsonFSharp.Parsers
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
 let lexeme = Lexing.LexBuffer<_>.LexemeString 
 }
+let hexagonal = ['a'-'f''A'-'F''0'-'9']
 let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
 let newline = ('\n' | '\r' '\n')
@@ -35,3 +38,9 @@ and parseEscapeCharacter state = parse
 | 'r'               { parseString ("\r"::state) lexbuf }
 | 'n'               { parseString ("\n"::state) lexbuf }
 | 't'               { parseString ("\t"::state) lexbuf }
+| 'u'               { parseUnicode state lexbuf }
+and parseUnicode state = parse
+| hexagonal*        { let str = lexeme lexbuf
+                      let v = Int32.Parse(str, NumberStyles.HexNumber)
+                      let s = Char.ConvertFromUtf32(v)
+                      parseString (s::state) lexbuf }

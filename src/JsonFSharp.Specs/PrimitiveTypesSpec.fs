@@ -58,6 +58,11 @@ let specs =
                     |> JsonParser.parse
                     |> shouldEqualString "\t"
 
+                it "parses unicodes" <| fun () ->
+                    "\"\\u0061\"" 
+                    |> JsonParser.parse
+                    |> shouldEqualString "a"
+
                 it "parses string containg \\b" <| fun () ->
                     "\"dummy\\bdummy\"" 
                     |> JsonParser.parse
