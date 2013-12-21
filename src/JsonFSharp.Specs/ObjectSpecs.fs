@@ -10,4 +10,10 @@ let specs =
             "{}"
             |> JsonParser.parse
             |> shouldEqualJson (JsonObject Map.empty)
+
+        it "parses object with one property" <| fun () ->
+            let expected = [("key", JsonString("value"))]
+            """{"key":"value"}"""
+            |> JsonParser.parse
+            |> shouldEqualObejct expected
     ]

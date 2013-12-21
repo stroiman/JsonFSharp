@@ -9,6 +9,10 @@ let shouldEqualJson expected actual =
 let shouldEqualString expected actual =
     actual |> shouldEqualJson (JsonString expected)
 
+let shouldEqualObejct expectedProperties actual =
+    let expected = JsonObject (expectedProperties |> Map.ofList)
+    actual |> shouldEqualJson expected
+
 let spec name input expected =
     it name <| fun () ->
         input
