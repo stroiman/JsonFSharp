@@ -8,7 +8,7 @@ open JsonFSharp
 %token <string> EXCEPTION
 %token <bool> BOOL
 %token NULL
-%token LBRAC RBRAC
+%token LBRAC RBRAC COMMA
 %token EOF
 %type < JsonFSharp.ParseResult > start
 %%
@@ -23,5 +23,11 @@ value:
     | BOOL      { JsonBool $1 }
     | NULL      { JsonNull }
     | LBRAC
-      value
-      RBRAC     { JsonArray [$2] }
+      arrayRev
+      RBRAC     { JsonArray ($2 |> List.rev) }
+
+arrayRev:
+    | value     { [$1] }
+    | arrayRev 
+      COMMA
+      value     { $3::$1 }

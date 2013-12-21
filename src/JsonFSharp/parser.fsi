@@ -4,6 +4,7 @@ type token =
   | EOF
   | LBRAC
   | RBRAC
+  | COMMA
   | NULL
   | BOOL of (bool)
   | EXCEPTION of (string)
@@ -13,6 +14,7 @@ type tokenId =
     | TOKEN_EOF
     | TOKEN_LBRAC
     | TOKEN_RBRAC
+    | TOKEN_COMMA
     | TOKEN_NULL
     | TOKEN_BOOL
     | TOKEN_EXCEPTION
@@ -24,6 +26,7 @@ type nonTerminalId =
     | NONTERM__startstart
     | NONTERM_start
     | NONTERM_value
+    | NONTERM_arrayRev
 /// This function maps integers indexes to symbolic token ids
 val tagOfToken: token -> int
 
