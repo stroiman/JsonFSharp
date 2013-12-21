@@ -1,0 +1,11 @@
+﻿%{
+open JsonFSharp
+%}
+
+%start start
+%token <string> STRING
+%token EOF
+%type < JsonFSharp.JsonValue > start
+%%
+
+start: { JsonString "DUMMY" }

@@ -44,18 +44,24 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Types.fs" />
-    <Compile Include="JsonParser.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="Types.fs" />
+    <None Include="Parser.fsy" />
+    <None Include="Lexer.fslex" />
+    <Compile Include="Parser.fs" />
+    <Compile Include="JsonParser.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
+  <Target Name="GenerateParser">
+    <Exec Command="..\lib\powerpack\fsyacc parser.fsy -o Parser.fs --module JsonFSharp.Parsers" />
+  </Target>
+  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser">
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
