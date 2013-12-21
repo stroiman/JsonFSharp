@@ -55,6 +55,8 @@ let specs =
             numberSpec "parse whole number" "123" 123.0
             numberSpec "parse whole number" "123.25" 123.25
             numberSpec "parse negative number" "-123.25" -123.25
+            numberSpec "parse scientific number" "1.2e2" 120.0
+            numberSpec "parse scientific number with uppercase E" "1.2E2" 120.0
         ]
     ]
 
