@@ -10,9 +10,11 @@ open JsonFSharp
 # 10 "Parser.fs"
 // This type is the type of tokens accepted by the parser
 type token = 
+  | EOF
   | STRING of (string)
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
+    | TOKEN_EOF
     | TOKEN_STRING
     | TOKEN_end_of_input
     | TOKEN_error
@@ -24,14 +26,16 @@ type nonTerminalId =
 // This function maps tokens to integers indexes
 let tagOfToken (t:token) = 
   match t with
-  | STRING _ -> 0 
+  | EOF  -> 0 
+  | STRING _ -> 1 
 
 // This function maps integers indexes to symbolic token ids
 let tokenTagToTokenId (tokenIdx:int) = 
   match tokenIdx with
-  | 0 -> TOKEN_STRING 
-  | 3 -> TOKEN_end_of_input
-  | 1 -> TOKEN_error
+  | 0 -> TOKEN_EOF 
+  | 1 -> TOKEN_STRING 
+  | 4 -> TOKEN_end_of_input
+  | 2 -> TOKEN_error
   | _ -> failwith "tokenTagToTokenId: bad token"
 
 /// This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
@@ -41,17 +45,19 @@ let prodIdxToNonTerminal (prodIdx:int) =
     | 1 -> NONTERM_start 
     | _ -> failwith "prodIdxToNonTerminal: bad production index"
 
-let _fsyacc_endOfInputTag = 3 
-let _fsyacc_tagOfErrorTerminal = 1
+let _fsyacc_endOfInputTag = 4 
+let _fsyacc_tagOfErrorTerminal = 2
 
 // This function gets the name of a token as a string
 let token_to_string (t:token) = 
   match t with 
+  | EOF  -> "EOF" 
   | STRING _ -> "STRING" 
 
 // This function gets the data carried by a token as an object
 let _fsyacc_dataOfToken (t:token) = 
   match t with 
+  | EOF  -> (null : System.Object) 
   | STRING _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x 
 let _fsyacc_gotos = [| 0us; 65535us; 1us; 65535us; 0us; 1us; |]
 let _fsyacc_sparseGotoTableRowOffsets = [|0us; 1us; |]
@@ -64,7 +70,7 @@ let _fsyacc_reductionSymbolCounts = [|1us; 0us; |]
 let _fsyacc_productionToNonTerminalTable = [|0us; 1us; |]
 let _fsyacc_immediateActions = [|65535us; 49152us; |]
 let _fsyacc_reductions ()  =    [| 
-# 67 "Parser.fs"
+# 73 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  JsonFSharp.JsonValue )) in
             Microsoft.FSharp.Core.Operators.box
@@ -73,18 +79,18 @@ let _fsyacc_reductions ()  =    [|
                       raise (Microsoft.FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : '_startstart));
-# 76 "Parser.fs"
+# 82 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 10 "parser.fsy"
-                               JsonString "DUMMY" 
+# 11 "parser.fsy"
+                              JsonString "DUMMY" 
                    )
-# 10 "parser.fsy"
+# 11 "parser.fsy"
                  :  JsonFSharp.JsonValue ));
 |]
-# 87 "Parser.fs"
+# 93 "Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
@@ -103,7 +109,7 @@ let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> =
                               match parse_error_rich with 
                               | Some f -> f ctxt
                               | None -> parse_error ctxt.Message);
-    numTerminals = 4;
+    numTerminals = 5;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
 let start lexer lexbuf :  JsonFSharp.JsonValue  =

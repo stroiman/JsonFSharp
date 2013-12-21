@@ -1,0 +1,15 @@
+﻿{
+module JsonFSharp.Lexer
+open JsonFSharp.Parsers
+open Microsoft.FSharp.Text.Lexing
+open Microsoft.FSharp.Text.Parsing.ParseHelpers
+let lexeme (lexbuf : LexBuffer<_>) = new System.String(lexbuf.Lexeme)
+}
+let digit = ['0'-'9']
+let whitespace = [' ' '\t' ]
+let newline = ('\n' | '\r' '\n')
+
+
+rule token = parse
+| "\".*\""		{ STRING(lexeme lexbuf) }
+| eof			{ EOF }

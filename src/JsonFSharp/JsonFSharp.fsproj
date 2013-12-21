@@ -47,8 +47,9 @@
     <None Include="Script.fsx" />
     <Compile Include="Types.fs" />
     <None Include="Parser.fsy" />
-    <None Include="Lexer.fslex" />
+    <None Include="Lexer.fsl" />
     <Compile Include="Parser.fs" />
+    <Compile Include="Lexer.fs" />
     <Compile Include="JsonParser.fs" />
   </ItemGroup>
   <PropertyGroup>
@@ -58,7 +59,10 @@
   <Target Name="GenerateParser">
     <Exec Command="..\lib\powerpack\fsyacc parser.fsy -o Parser.fs --module JsonFSharp.Parsers" />
   </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser">
+  <Target Name="GenerateLexer">
+    <Exec Command="..\lib\powerpack\fslex lexer.fsl -o Lexer.fs --unicode" />
+  </Target>
+  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser;GenerateLexer">
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
