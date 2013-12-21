@@ -12,10 +12,11 @@ let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
 let newline = ('\n' | '\r' '\n')
 let unicode = hexagonal hexagonal hexagonal hexagonal 
+let number = digit* ('.' digit+)?
 
 rule token = parse
 | "\""          { parseString [] lexbuf }
-| digit*        { let value = lexeme lexbuf |> Double.Parse
+| number        { let value = lexeme lexbuf |> Double.Parse
                   DOUBLE(value) }
 | _
                 {

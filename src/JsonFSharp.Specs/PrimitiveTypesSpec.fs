@@ -53,6 +53,7 @@ let specs =
 
         describe "number parsing" [
             numberSpec "parse whole number" "123" 123.0
+            numberSpec "parse whole number" "123.25" 123.25
         ]
     ]
 
