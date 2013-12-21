@@ -111,7 +111,7 @@ and _fslex_parseString state _fslex_state lexbuf =
           )
   | 2 -> ( 
 # 30 "lexer.fsl"
-                                     let str = state |> List.fold (+) ""
+                                     let str = state |> List.fold (fun a b -> b + a) ""
                                      STRING(str) 
 # 116 "Lexer.fs"
           )
@@ -183,6 +183,6 @@ and _fslex_parseUnicode state _fslex_state lexbuf =
           )
   | _ -> failwith "parseUnicode"
 
-# 47 "lexer.fsl"
+# 48 "lexer.fsl"
 
 # 3000000 "Lexer.fs"

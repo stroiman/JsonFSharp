@@ -69,9 +69,9 @@ let specs =
                     |> shouldEqualString "a"
 
                 it "parses string containg \\b" <| fun () ->
-                    "\"dummy\\bdummy\"" 
+                    "\"dummy1\\bdummy2\"" 
                     |> JsonParser.parse
-                    |> shouldEqualString "dummy\bdummy"
+                    |> shouldEqualString "dummy1\bdummy2"
 
                 describe "bad unicode values" [
                     it "fails when unicode contains 3 characters" <| fun () ->
