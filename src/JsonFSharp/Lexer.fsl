@@ -21,6 +21,7 @@ rule token = parse
                   DOUBLE(value) }
 | "true"        { BOOL(true) }
 | "false"       { BOOL(false) }
+| "null"        { NULL }
 | _
                 {
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",

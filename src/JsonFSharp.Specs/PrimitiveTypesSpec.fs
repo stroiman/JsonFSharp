@@ -63,5 +63,7 @@ let specs =
             spec "parse true" "true" (JsonBool true)
             spec "parse false" "false" (JsonBool false)
         ]
+
+        spec "parse null" "null" JsonNull
     ]
 
