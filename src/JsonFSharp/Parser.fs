@@ -72,7 +72,7 @@ let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 16385us; |]
 let _fsyacc_reductions ()  =    [| 
 # 73 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  JsonFSharp.JsonValue )) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  JsonFSharp.ParseResult )) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -86,10 +86,10 @@ let _fsyacc_reductions ()  =    [|
                 (
                    (
 # 11 "parser.fsy"
-                                         JsonString(_1) 
+                                         Success (JsonString _1) 
                    )
 # 11 "parser.fsy"
-                 :  JsonFSharp.JsonValue ));
+                 :  JsonFSharp.ParseResult ));
 |]
 # 94 "Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
@@ -113,5 +113,5 @@ let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> =
     numTerminals = 5;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
-let start lexer lexbuf :  JsonFSharp.JsonValue  =
+let start lexer lexbuf :  JsonFSharp.ParseResult  =
     Microsoft.FSharp.Core.Operators.unbox ((tables ()).Interpret(lexer, lexbuf, 0))

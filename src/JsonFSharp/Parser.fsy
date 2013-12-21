@@ -5,7 +5,7 @@ open JsonFSharp
 %start start
 %token <string> STRING
 %token EOF
-%type < JsonFSharp.JsonValue > start
+%type < JsonFSharp.ParseResult > start
 %%
 
-start: STRING EOF { JsonString($1) }
+start: STRING EOF { Success (JsonString $1) }
