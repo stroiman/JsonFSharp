@@ -27,4 +27,11 @@ and parseString state = parse
 | '"'               { let str = state |> List.rev |> List.reduce (+) 
                       STRING(str) } 
 and parseEscapeCharacter state = parse
-| "b"               { parseString ("\b"::state) lexbuf }
+| '"'               { parseString ("\""::state) lexbuf }
+| '\\'              { parseString ("\\"::state) lexbuf }
+| '/'               { parseString ("/"::state) lexbuf }
+| 'f'               { parseString ("\f"::state) lexbuf }
+| 'b'               { parseString ("\b"::state) lexbuf }
+| 'r'               { parseString ("\r"::state) lexbuf }
+| 'n'               { parseString ("\n"::state) lexbuf }
+| 't'               { parseString ("\t"::state) lexbuf }
