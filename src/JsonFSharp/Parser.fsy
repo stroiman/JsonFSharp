@@ -6,6 +6,7 @@ open JsonFSharp
 %token <string> STRING
 %token <double> DOUBLE
 %token <string> EXCEPTION
+%token <bool> BOOL
 %token EOF
 %type < JsonFSharp.ParseResult > start
 %%
@@ -13,4 +14,5 @@ open JsonFSharp
 start: 
     | STRING EOF { Success (JsonString $1) }
     | DOUBLE EOF { Success (JsonNumber $1) }
+    | BOOL EOF { Success (JsonBool $1) }
     | EXCEPTION { Failure $1 }

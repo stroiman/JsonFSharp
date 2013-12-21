@@ -58,5 +58,10 @@ let specs =
             numberSpec "parse scientific number" "1.2e2" 120.0
             numberSpec "parse scientific number with uppercase E" "1.2E2" 120.0
         ]
+
+        describe "parse boolean" [
+            spec "parse true" "true" (JsonBool true)
+            spec "parse false" "false" (JsonBool false)
+        ]
     ]
 

@@ -19,6 +19,8 @@ rule token = parse
 | "\""          { parseString [] lexbuf }
 | number        { let value = lexeme lexbuf |> Double.Parse
                   DOUBLE(value) }
+| "true"        { BOOL(true) }
+| "false"       { BOOL(false) }
 | _
                 {
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
