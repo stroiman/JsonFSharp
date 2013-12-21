@@ -3,5 +3,6 @@ bin/
 obj/
 *.user
 *.suo
+*.swp
 *.userprefs
 .DS_Store
