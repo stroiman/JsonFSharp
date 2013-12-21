@@ -15,6 +15,12 @@ let stringSpec name input expectedOutput =
         |> JsonParser.parse
         |> shouldEqualString expectedOutput
 
+let numberSpec name input expectedOutput =
+    it name <| fun () ->
+        input
+        |> JsonParser.parse
+        |> shouldEqualJson (JsonNumber expectedOutput)
+
 let specs =
     describe "Parsing primitive types" [
         describe "string parsing" [
@@ -43,6 +49,10 @@ let specs =
                     stringSpec "parses unicode contains 5 characters" "\"\\u00615\"" "a5"
                 ]
             ]
+        ]
+
+        describe "number parsing" [
+            numberSpec "parse whole number" "123" 123.0
         ]
     ]
 

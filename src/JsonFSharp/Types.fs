@@ -2,6 +2,7 @@
 
 type JsonValue =
     | JsonString of string
+    | JsonNumber of double
 
 type ParseResult =
     | Success of JsonValue
