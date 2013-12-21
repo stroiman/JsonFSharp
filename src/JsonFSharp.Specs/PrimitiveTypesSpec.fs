@@ -24,7 +24,7 @@ let specs =
 
                 describe "bad unicode values" [
                     it "fails when unicode contains 3 characters" <| fun () ->
-                        let result = "\"\\u123\"" |> JsonParser.parse
+                        let result = "\"\\u123\"" |> parseString
                         match result with
                         | Success(_) -> failwith "Expected fail"
                         | Failure(_) -> ()

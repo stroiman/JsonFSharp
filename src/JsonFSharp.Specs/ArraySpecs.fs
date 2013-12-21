@@ -8,12 +8,12 @@ let specs =
     describe "Parsing arrays" [
         it "parses empty array" <| fun () ->
             "[]"
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualJson (JsonArray [])
 
         it "parses array with single element" <| fun () ->
             "[null]"
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualJson (JsonArray [JsonNull])
 
         it "parses array with two elements" <| fun () ->
@@ -21,6 +21,6 @@ let specs =
                                JsonString "one"
                                JsonString "two" ]
             "[\"one\",\"two\"]"
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualJson expected
     ]

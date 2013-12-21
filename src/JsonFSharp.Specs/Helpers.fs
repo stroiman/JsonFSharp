@@ -3,6 +3,8 @@ open FSpec.Core.DslV2
 open FSpec.Core.MatchersV2
 open JsonFSharp
 
+let parseString = JsonParser.parse
+
 let shouldEqualJson expected actual =
     actual |> should equal (Success expected)
 
@@ -16,7 +18,7 @@ let shouldEqualObject expectedProperties actual =
 let spec name input expected =
     it name <| fun () ->
         input
-        |> JsonParser.parse
+        |> parseString
         |> shouldEqualJson expected
         
 let stringSpec name input expectedOutput =

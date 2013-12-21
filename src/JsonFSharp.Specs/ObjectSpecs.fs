@@ -8,13 +8,13 @@ let specs =
     describe "Object parsing" [
         it "parses simple object" <| fun () ->
             "{}"
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualJson (JsonObject Map.empty)
 
         it "parses object with one property" <| fun () ->
             let expected = [("key", JsonString("value"))]
             """{"key":"value"}"""
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualObject expected
 
         it "parses object with two properties" <| fun () ->
@@ -22,7 +22,7 @@ let specs =
                 ("a", JsonString("value a"))
                 ("b", JsonString("value b"))]
             """{"a":"value a","b":"value b"}"""
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualObject expected
 
         it "ignores white space" <| fun () ->
@@ -32,6 +32,6 @@ let specs =
             """{ "a" : "value a",
                  "b" : "value b"
                }"""
-            |> JsonParser.parse
+            |> parseString
             |> shouldEqualObject expected
     ]
