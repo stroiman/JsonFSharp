@@ -16,6 +16,11 @@ let specs =
                     let actual = "\"\\b\"" |> JsonParser.parse
                     let expected = Success (JsonString "\b")
                     actual |> should equal expected
+
+                it "parses string containg \\b" <| fun () ->
+                    let actual = "\"dummy\\bdummy\"" |> JsonParser.parse
+                    let expected = Success (JsonString "dummy\bdummy")
+                    actual |> should equal expected
             ]
         ]
     ]

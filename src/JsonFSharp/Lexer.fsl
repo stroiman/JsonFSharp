@@ -11,7 +11,7 @@ let newline = ('\n' | '\r' '\n')
 
 
 rule token = parse
-| "\""          { parseString lexbuf }
+| "\""          { parseString [] lexbuf }
 | _
                 {
                     let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
@@ -20,10 +20,11 @@ rule token = parse
                     EXCEPTION exceptionString
                 } 
 | eof			{ EOF }
-and parseString = parse
-| [^ '\\' '"']*     { endString (lexeme lexbuf) lexbuf }
-| '\\'              { parseEscapeCharacter lexbuf }
-and parseEscapeCharacter = parse
-| "b"             { endString ("\b") lexbuf }
-and endString state = parse
-| "\""          { STRING(state) }
+and parseString state = parse
+| [^ '\\' '"']*     { let str = lexeme lexbuf
+                      parseString (str::state) lexbuf }
+| '\\'              { parseEscapeCharacter state lexbuf }
+| '"'               { let str = state |> List.rev |> List.reduce (+) 
+                      STRING(str) } 
+and parseEscapeCharacter state = parse
+| "b"               { parseString ("\b"::state) lexbuf }
