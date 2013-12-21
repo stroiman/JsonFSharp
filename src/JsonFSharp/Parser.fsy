@@ -14,9 +14,14 @@ open JsonFSharp
 %%
 
 start: 
-    | STRING EOF { Success (JsonString $1) }
-    | DOUBLE EOF { Success (JsonNumber $1) }
-    | BOOL EOF { Success (JsonBool $1) }
-    | NULL EOF { Success (JsonNull) }
-    | LBRAC NULL RBRAC EOF { Success (JsonArray [JsonNull]) }
+    | value EOF { Success $1 }
     | EXCEPTION { Failure $1 }
+
+value:
+    | STRING    { JsonString $1 }
+    | DOUBLE    { JsonNumber $1 }
+    | BOOL      { JsonBool $1 }
+    | NULL      { JsonNull }
+    | LBRAC
+      value
+      RBRAC     { JsonArray [$2] }
