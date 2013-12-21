@@ -2,8 +2,9 @@
 open FSpec.Core.DslV2
 open FSpec.Core.MatchersV2
 open JsonFSharp
+open JsonParser
 
-let parseString = JsonParser.parse
+let parseString = JsonInput.fromString >> parse
 
 let shouldEqualJson expected actual =
     actual |> should equal (Success expected)

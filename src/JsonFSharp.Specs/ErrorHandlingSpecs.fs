@@ -2,7 +2,7 @@
 open FSpec.Core.DslV2
 open FSpec.Core.MatchersV2
 open JsonFSharp
-open Helper
+open Helpers
 
 let specs =
     describe "Error handling" [
