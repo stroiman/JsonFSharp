@@ -10,6 +10,13 @@ let specs =
                 let actual = "\"dummy\"" |> JsonParser.parse
                 let expected = Success (JsonString "dummy")
                 actual |> should equal expected
+
+            describe "escape characters" [
+                it "parses \\b" <| fun () ->
+                    let actual = "\"\\b\"" |> JsonParser.parse
+                    let expected = Success (JsonString "\b")
+                    actual |> should equal expected
+            ]
         ]
     ]
 

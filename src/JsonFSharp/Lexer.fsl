@@ -21,6 +21,9 @@ rule token = parse
                 } 
 | eof			{ EOF }
 and parseString = parse
-| [^ '"']*      { endString (lexeme lexbuf) lexbuf }
+| [^ '\\' '"']*     { endString (lexeme lexbuf) lexbuf }
+| '\\'              { parseEscapeCharacter lexbuf }
+and parseEscapeCharacter = parse
+| "b"             { endString ("\b") lexbuf }
 and endString state = parse
 | "\""          { STRING(state) }
