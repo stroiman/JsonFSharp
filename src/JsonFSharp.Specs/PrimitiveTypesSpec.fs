@@ -9,17 +9,17 @@ let shouldEqualJson expected actual =
 let shouldEqualString expected actual =
     actual |> shouldEqualJson (JsonString expected)
 
-let stringSpec name input expectedOutput =
+let spec name input expected =
     it name <| fun () ->
         input
         |> JsonParser.parse
-        |> shouldEqualString expectedOutput
+        |> shouldEqualJson expected
+        
+let stringSpec name input expectedOutput =
+    spec name input (JsonString expectedOutput)
 
 let numberSpec name input expectedOutput =
-    it name <| fun () ->
-        input
-        |> JsonParser.parse
-        |> shouldEqualJson (JsonNumber expectedOutput)
+    spec name input (JsonNumber expectedOutput)
 
 let specs =
     describe "Parsing primitive types" [
