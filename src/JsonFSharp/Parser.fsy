@@ -36,8 +36,16 @@ arrayRev:
       COMMA
       value     { $3::$1 }
 
-properties:
-    |           { Map.empty }
+property:
     | STRING
       COLON
-      value     { [($1,$3)] |> Map.ofList }
+      value     { ($1,$3) }
+
+properties:
+    |           { Map.empty }
+    | property  { let (key,value) = $1
+                  Map.empty |> Map.add key value }
+    | properties
+      COMMA
+      property  { let (key,value) = $3
+                  $1 |> Map.add key value }

@@ -15,5 +15,13 @@ let specs =
             let expected = [("key", JsonString("value"))]
             """{"key":"value"}"""
             |> JsonParser.parse
-            |> shouldEqualObejct expected
+            |> shouldEqualObject expected
+
+        it "parses object with two properties" <| fun () ->
+            let expected = [
+                ("a", JsonString("value a"))
+                ("b", JsonString("value b"))]
+            """{"a":"value a","b":"value b"}"""
+            |> JsonParser.parse
+            |> shouldEqualObject expected
     ]

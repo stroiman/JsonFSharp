@@ -33,6 +33,7 @@ type nonTerminalId =
     | NONTERM_start
     | NONTERM_value
     | NONTERM_arrayRev
+    | NONTERM_property
     | NONTERM_properties
 /// This function maps integers indexes to symbolic token ids
 val tagOfToken: token -> int
