@@ -111,7 +111,7 @@ and _fslex_parseString state _fslex_state lexbuf =
           )
   | 2 -> ( 
 # 30 "lexer.fsl"
-                                     let str = state |> List.rev |> List.reduce (+) 
+                                     let str = state |> List.fold (+) ""
                                      STRING(str) 
 # 116 "Lexer.fs"
           )

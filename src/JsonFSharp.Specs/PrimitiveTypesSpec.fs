@@ -17,6 +17,11 @@ let specs =
                 |> JsonParser.parse
                 |> shouldEqualString "dummy"
 
+            it "handles empty strings" <| fun () ->
+                "\"\""
+                |> JsonParser.parse
+                |> shouldEqualString ""
+
             describe "escape characters" [
                 it """parses \" """ <| fun () ->
                     "\"\\\"\"" 
