@@ -33,7 +33,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSharp.PowerPack">
-      <HintPath>..\lib\powerpack\FSharp.PowerPack.dll</HintPath>
+      <HintPath>..\packages\FSPowerPack.Core.Community.3.0.0.0\Lib\Net40\FSharp.PowerPack.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -51,6 +52,7 @@
     <Compile Include="Parser.fs" />
     <Compile Include="Lexer.fs" />
     <Compile Include="JsonParser.fs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
