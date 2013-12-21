@@ -27,6 +27,7 @@ value:
       RBRAC     { JsonArray ($2 |> List.rev) }
 
 arrayRev:
+    |           { [] }
     | value     { [$1] }
     | arrayRev 
       COMMA

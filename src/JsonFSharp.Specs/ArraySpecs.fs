@@ -6,6 +6,11 @@ open Helpers
 
 let specs =
     describe "Parsing arrays" [
+        it "parses empty array" <| fun () ->
+            "[]"
+            |> JsonParser.parse
+            |> shouldEqualJson (JsonArray [])
+
         it "parses array with single element" <| fun () ->
             "[null]"
             |> JsonParser.parse
