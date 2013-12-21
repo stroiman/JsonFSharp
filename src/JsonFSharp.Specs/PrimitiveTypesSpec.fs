@@ -3,24 +3,30 @@ open FSpec.Core.DslV2
 open FSpec.Core.MatchersV2
 open JsonFSharp
 
+let shouldEqualJson expected actual =
+    actual |> should equal (Success expected)
+
+let shouldEqualString expected actual =
+    actual |> shouldEqualJson (JsonString expected)
+
 let specs =
     describe "Parsing primitive types" [
         describe "string parsing" [
             it "handles simple strings" <| fun () ->
-                let actual = "\"dummy\"" |> JsonParser.parse
-                let expected = Success (JsonString "dummy")
-                actual |> should equal expected
+                "\"dummy\"" 
+                |> JsonParser.parse
+                |> shouldEqualString "dummy"
 
             describe "escape characters" [
                 it "parses \\b" <| fun () ->
-                    let actual = "\"\\b\"" |> JsonParser.parse
-                    let expected = Success (JsonString "\b")
-                    actual |> should equal expected
+                    "\"\\b\"" 
+                    |> JsonParser.parse
+                    |> shouldEqualString "\b"
 
                 it "parses string containg \\b" <| fun () ->
-                    let actual = "\"dummy\\bdummy\"" |> JsonParser.parse
-                    let expected = Success (JsonString "dummy\bdummy")
-                    actual |> should equal expected
+                    "\"dummy\\bdummy\"" 
+                    |> JsonParser.parse
+                    |> shouldEqualString "dummy\bdummy"
             ]
         ]
     ]
