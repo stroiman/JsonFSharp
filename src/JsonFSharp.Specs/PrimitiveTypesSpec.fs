@@ -9,69 +9,29 @@ let shouldEqualJson expected actual =
 let shouldEqualString expected actual =
     actual |> shouldEqualJson (JsonString expected)
 
+let stringSpec name input expectedOutput =
+    it name <| fun () ->
+        input
+        |> JsonParser.parse
+        |> shouldEqualString expectedOutput
+
 let specs =
     describe "Parsing primitive types" [
         describe "string parsing" [
-            it "handles simple strings" <| fun () ->
-                "\"dummy\"" 
-                |> JsonParser.parse
-                |> shouldEqualString "dummy"
-
-            it "handles empty strings" <| fun () ->
-                "\"\""
-                |> JsonParser.parse
-                |> shouldEqualString ""
+            stringSpec "handles simple strings" "\"dummy\"" "dummy"
+            stringSpec "handles empty strings" "\"\"" ""
 
             describe "escape characters" [
-                it """parses \" """ <| fun () ->
-                    "\"\\\"\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\""
-
-                it "parses \\\\" <| fun () ->
-                    "\"\\\\\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\\"
-
-                it "parses \\/" <| fun () ->
-                    "\"\\/\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "/"
-
-                it "parses \\b" <| fun () ->
-                    "\"\\b\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\b"
-
-                it "parses \\f" <| fun () ->
-                    "\"\\f\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\f"
-
-                it "parses \\n" <| fun () ->
-                    "\"\\n\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\n"
-
-                it "parses \\r" <| fun () ->
-                    "\"\\r\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\r"
-
-                it "parses \\t" <| fun () ->
-                    "\"\\t\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "\t"
-
-                it "parses unicodes" <| fun () ->
-                    "\"\\u0061\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "a"
-
-                it "parses string containg \\b" <| fun () ->
-                    "\"dummy1\\bdummy2\"" 
-                    |> JsonParser.parse
-                    |> shouldEqualString "dummy1\bdummy2"
+                stringSpec """parses \" """ "\"\\\"\"" "\""
+                stringSpec "parses \\\\" "\"\\\\\"" "\\"
+                stringSpec "parses \\/" "\"\\/\"" "/"
+                stringSpec "parses \\b" "\"\\b\"" "\b"
+                stringSpec "parses \\f" "\"\\f\"" "\f"
+                stringSpec "parses \\n" "\"\\n\"" "\n"
+                stringSpec "parses \\r" "\"\\r\"" "\r"
+                stringSpec "parses \\t" "\"\\t\"" "\t"
+                stringSpec "parses unicodes" "\"\\u0061\"" "a"
+                stringSpec "parses string containg \\b" "\"dummy1\\bdummy2\"" "dummy1\bdummy2"
 
                 describe "bad unicode values" [
                     it "fails when unicode contains 3 characters" <| fun () ->
@@ -80,10 +40,7 @@ let specs =
                         | Success(_) -> failwith "Expected fail"
                         | Failure(_) -> ()
                         
-                    it "fails when unicode contains 5 characters" <| fun () ->
-                        "\"\\u00615\"" 
-                        |> JsonParser.parse
-                        |> shouldEqualString "a5"
+                    stringSpec "parses unicode contains 5 characters" "\"\\u00615\"" "a5"
                 ]
             ]
         ]
