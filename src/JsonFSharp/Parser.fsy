@@ -8,4 +8,4 @@ open JsonFSharp
 %type < JsonFSharp.JsonValue > start
 %%
 
-start: { JsonString "DUMMY" }
+start: STRING EOF { JsonString($1) }

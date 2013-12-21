@@ -3,7 +3,7 @@ module JsonFSharp.Lexer
 open JsonFSharp.Parsers
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-let lexeme (lexbuf : LexBuffer<_>) = new System.String(lexbuf.Lexeme)
+let lexeme = Lexing.LexBuffer<_>.LexemeString 
 }
 let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
@@ -11,5 +11,12 @@ let newline = ('\n' | '\r' '\n')
 
 
 rule token = parse
-| "\".*\""		{ STRING(lexeme lexbuf) }
+| "\"dummy\""   { STRING("dummy") }
+| _
+                {
+                    let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
+                                                            lexbuf.EndPos.Line + 1,
+                                                            lexbuf.EndPos.Column)
+                    failwith exceptionString
+                } 
 | eof			{ EOF }

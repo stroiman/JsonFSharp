@@ -61,14 +61,14 @@ let _fsyacc_dataOfToken (t:token) =
   | STRING _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x 
 let _fsyacc_gotos = [| 0us; 65535us; 1us; 65535us; 0us; 1us; |]
 let _fsyacc_sparseGotoTableRowOffsets = [|0us; 1us; |]
-let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; |]
-let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us; 2us; |]
-let _fsyacc_action_rows = 2
-let _fsyacc_actionTableElements = [|0us; 16385us; 0us; 49152us; |]
-let _fsyacc_actionTableRowOffsets = [|0us; 1us; |]
-let _fsyacc_reductionSymbolCounts = [|1us; 0us; |]
+let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; 1us; 1us; 1us; 1us; |]
+let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us; 2us; 4us; 6us; |]
+let _fsyacc_action_rows = 4
+let _fsyacc_actionTableElements = [|1us; 32768us; 1us; 2us; 0us; 49152us; 1us; 32768us; 0us; 3us; 0us; 16385us; |]
+let _fsyacc_actionTableRowOffsets = [|0us; 2us; 3us; 5us; |]
+let _fsyacc_reductionSymbolCounts = [|1us; 2us; |]
 let _fsyacc_productionToNonTerminalTable = [|0us; 1us; |]
-let _fsyacc_immediateActions = [|65535us; 49152us; |]
+let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 16385us; |]
 let _fsyacc_reductions ()  =    [| 
 # 73 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -81,16 +81,17 @@ let _fsyacc_reductions ()  =    [|
                  : '_startstart));
 # 82 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 11 "parser.fsy"
-                              JsonString "DUMMY" 
+                                         JsonString(_1) 
                    )
 # 11 "parser.fsy"
                  :  JsonFSharp.JsonValue ));
 |]
-# 93 "Parser.fs"
+# 94 "Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
