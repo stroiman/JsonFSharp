@@ -67,6 +67,19 @@ let specs =
                     "\"dummy\\bdummy\"" 
                     |> JsonParser.parse
                     |> shouldEqualString "dummy\bdummy"
+
+                describe "bad unicode values" [
+                    it "fails when unicode contains 3 characters" <| fun () ->
+                        let result = "\"\\u123\"" |> JsonParser.parse
+                        match result with
+                        | Success(_) -> failwith "Expected fail"
+                        | Failure(_) -> ()
+                        
+                    it "fails when unicode contains 5 characters" <| fun () ->
+                        "\"\\u00615\"" 
+                        |> JsonParser.parse
+                        |> shouldEqualString "a5"
+                ]
             ]
         ]
     ]
