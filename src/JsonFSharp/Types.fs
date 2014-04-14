@@ -8,6 +8,8 @@ type JsonValue =
     | JsonArray of JsonValue list
     | JsonObject of Map<string,JsonValue>
 
-type ParseResult =
-    | Success of JsonValue
+type Result<'TSuccess> =
+    | Success of 'TSuccess
     | Failure of string
+
+type ParseResult = Result<JsonValue>
