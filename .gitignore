@@ -6,3 +6,5 @@ obj/
 *.swp
 *.userprefs
 .DS_Store
+*.ncrunchsolution
+_NCrunch*
