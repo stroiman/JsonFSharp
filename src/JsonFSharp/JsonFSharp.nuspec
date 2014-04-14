@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>JsonFSharp</id>
+    <version>0.1</version>
+    <title>JsonF#</title>
+    <authors>Peter Strøiman</authors>
+    <owners>Peter Strøiman</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A simple JsonParser for F# that parses to discriminated union types.</description>
+    <copyright>Copyright 2013</copyright>
+    <tags>F# FSharp json</tags>
+  </metadata>
+</package>
