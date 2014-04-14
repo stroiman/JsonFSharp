@@ -54,6 +54,7 @@
     <Compile Include="ArraySpecs.fs" />
     <Compile Include="ErrorHandlingSpecs.fs" />
     <Compile Include="InputTypesSpecs.fs" />
+    <Compile Include="TypeConversionSpec.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
   </ItemGroup>

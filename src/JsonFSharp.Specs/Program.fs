@@ -5,7 +5,8 @@ let summary =
       ErrorHandlingSpecs.specs
       ArraySpecs.specs
       ObjectSpecs.specs
-      InputTypesSpecs.specs ]
+      InputTypesSpecs.specs
+      TypeConversionSpec.specs ]
     |> List.map run
     |> List.map getSummary
     |> List.sum
