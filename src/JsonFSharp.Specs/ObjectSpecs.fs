@@ -34,4 +34,12 @@ let specs =
                }"""
             |> parseString
             |> shouldEqualObject expected
+
+        it "parses nested objects" <| fun () ->
+            let expected = [
+                ("a", JsonObject(["b", JsonNumber(42.0)] |> Map.ofList))]
+            """{ "a": { "b": 42 } }"""
+            |> parseString
+            |> shouldEqualObject expected
+
     ]
