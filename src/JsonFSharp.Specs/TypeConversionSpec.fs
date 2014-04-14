@@ -10,6 +10,15 @@ type FooType = {
     foo2: int
     }
 
+type ChildType = {
+    foo: int
+    }
+
+type ParentType = {
+    child: ChildType;
+    bar: int
+    }
+
 let getJson = function
     | Success(x) -> x
     | Failure(x) -> failwith x
@@ -20,21 +29,28 @@ let getObjectData (json: JsonValue) =
     | JsonNumber(x) -> x :> System.Object
     | _ -> failwith "Not implemented"
 
-let toInstance<'T> (json: JsonValue) =
+let rec toInstanceOfType (targetType: System.Type) (json: JsonValue) =
     match json with
     | JsonObject(obj) ->
         let getValue name = obj.[name]
-        let targetType = typeof<'T>
         let ctor = targetType.GetConstructors().Single()
         let ctorParameters = 
             ctor.GetParameters() 
             |> Array.toList
             |> List.map (fun param -> 
-                let value = getValue param.Name |> getObjectData
-                System.Convert.ChangeType(value, param.ParameterType))
+                let jsonValue = getValue param.Name
+                match jsonValue with
+                | JsonObject(x) -> toInstanceOfType param.ParameterType jsonValue
+                | _ ->
+                    let value = jsonValue |> getObjectData
+                    System.Convert.ChangeType(value, param.ParameterType))
             |> List.toArray
-        ctor.Invoke(ctorParameters) :?> 'T
+        ctor.Invoke(ctorParameters)
     | _ -> failwith "Not an object"
+
+let toInstance<'T> (json: JsonValue) =
+    let targetType = typeof<'T>
+    toInstanceOfType targetType json :?> 'T
 
 let specs = 
     describe "Type conversions" [
@@ -46,4 +62,15 @@ let specs =
                 |> getJson
                 |> toInstance<FooType>
             value.foo |> should equal "bar"
+
+        it "should return parent type" <| fun () ->
+            let value =
+                """{ "child": { "foo": 42 }, "bar": 43 }"""
+                |> JsonInput.fromString
+                |> parse
+                |> getJson
+                |> toInstance<ParentType>
+            value.child.foo |> should equal 42
+            value.bar |> should equal 43
+                
     ]
