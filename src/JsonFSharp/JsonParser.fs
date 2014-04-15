@@ -26,6 +26,12 @@ let parse input =
 
 
 let toInstance<'T> json =
+    let changeType (targetType: System.Type) value = 
+        try
+            Success(System.Convert.ChangeType(value :> System.Object, targetType))
+        with
+            | e -> Failure "incompatible types"
+
     let rec toInstanceOfType (targetType: System.Type) json =
         match json with
         | JsonObject(obj) ->
@@ -35,7 +41,7 @@ let toInstance<'T> json =
                 |> Result.FromOption (sprintf "could not find data for record value '%s'" name)
             
             let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
-                let toObj value = Success(System.Convert.ChangeType(value :> System.Object, arg.ParameterType))
+                let toObj value = changeType arg.ParameterType value
                 let convertToType jsonValue =
                     match jsonValue with
                     | JsonObject(x) -> toInstanceOfType arg.ParameterType jsonValue 

@@ -48,12 +48,22 @@ let specs =
             value.child.foo |> should equal 42
             value.bar |> should equal 43
 
-        describe "when json does not contain correct parameter" [
-            it "should return a proper error type" <| fun () ->
-                """{ "bar": 42 }"""
-                |> stringToJson
-                |> toInstance<FooTypeWithInt>
-                |> getFailure
-                |> should matchRegex "could not find data for record value 'foo'"
+        describe "type mismatch" [
+            describe "when json does not contain correct parameter" [
+                it "should return a proper error type" <| fun () ->
+                    """{ "bar": 42 }"""
+                    |> stringToJson
+                    |> toInstance<FooTypeWithInt>
+                    |> getFailure
+                    |> should matchRegex "could not find data for record value 'foo'"
+            ]
+            describe "when json data and record value are incompatible" [
+                it "should return a proper error type" <| fun () ->
+                    """{ "foo": "bar" }"""
+                    |> stringToJson
+                    |> toInstance<FooTypeWithInt>
+                    |> getFailure
+                    |> should matchRegex "incompatible type"
+            ]
         ]
     ]
