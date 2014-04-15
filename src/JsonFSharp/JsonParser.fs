@@ -33,6 +33,14 @@ let toInstance<'T> json =
             | e -> Failure "incompatible types"
 
     let rec toInstanceOfType (targetType: System.Type) json =
+        let coerceToType targetType jsonValue  =
+            let toObj value = changeType targetType value
+            match jsonValue with
+            | JsonObject(x) -> toInstanceOfType targetType jsonValue 
+            | JsonString(x) -> toObj x
+            | JsonNumber(x) -> toObj x
+            | _ -> failwith "Not implemented"
+
         match json with
         | JsonObject(obj) ->
             let getValue name = 
@@ -41,15 +49,8 @@ let toInstance<'T> json =
                 |> Result.FromOption (sprintf "could not find data for record value '%s'" name)
             
             let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
-                let toObj value = changeType arg.ParameterType value
-                let convertToType jsonValue =
-                    match jsonValue with
-                    | JsonObject(x) -> toInstanceOfType arg.ParameterType jsonValue 
-                    | JsonString(x) -> toObj x
-                    | JsonNumber(x) -> toObj x
-                    | _ -> failwith "Not implemented"
                 getValue arg.Name
-                >>= convertToType
+                >>= coerceToType arg.ParameterType
 
             let rec getConstructorParameters (args: System.Reflection.ParameterInfo list) =
                 match args with
