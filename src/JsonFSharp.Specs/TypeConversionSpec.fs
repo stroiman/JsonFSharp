@@ -9,10 +9,15 @@ type FooTypeWithString = { foo : string; }
 type FooTypeWithInt = { foo : int; }
 type FooTypeWithIntOption = { foo : int option; }
 type FooTypeWithBools = { t: bool; f: bool }
+type FooTypeWithIntList = { foo: int list }
 type ParentType = {
     child: FooTypeWithInt;
     bar: int
     }
+
+type ParentWithList = {
+    children : FooTypeWithInt list;
+    bar : int }
 
 let getSuccess = function
     | Success(x) -> x
@@ -64,6 +69,23 @@ let specs =
                 match value with
                 | Success _ -> failwith "Fail was expected"
                 | Failure _ -> ()
+        ]
+
+        describe "array values" [
+            it "converts the data to a compatible list" <| fun () ->
+                let value =
+                    """{ "foo": [1, 2] }"""
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithIntList>
+                value.foo |> should equal [1; 2]
+
+            it "converts arrays with objects" <| fun () ->
+                let value =
+                    """{ "children": [ {"foo": 1}, {"foo": 2} ], "bar": 3}"""
+                    |> stringToJson
+                    |> jsonToObj<ParentWithList>
+                let expected = { children=[{foo= 1};{foo= 2}];bar= 3}
+                value |> should equal expected
         ]
 
         it "should return parent type" <| fun () ->
