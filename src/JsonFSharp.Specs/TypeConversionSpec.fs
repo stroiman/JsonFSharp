@@ -7,6 +7,7 @@ open JsonParser
 
 type FooTypeWithString = { foo : string; }
 type FooTypeWithInt = { foo : int; }
+type FooTypeWithIntOption = { foo : int option; }
 type FooTypeWithBools = { t: bool; f: bool }
 type ParentType = {
     child: FooTypeWithInt;
@@ -46,6 +47,23 @@ let specs =
                     |> jsonToObj<FooTypeWithBools>
                 value.t |> should equal true
                 value.f |> should equal false
+        ]
+        describe "null values" [
+            it "Converts null to Option.None for option types" <| fun () ->
+                let value =
+                    """{ "foo": null }"""
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithIntOption>
+                value.foo |> should equal None
+
+            it "Fails when type is not an option type" <| fun () ->
+                let value = 
+                    """{ "foo": null }"""
+                    |> stringToJson
+                    |> toInstance<FooTypeWithInt>
+                match value with
+                | Success _ -> failwith "Fail was expected"
+                | Failure _ -> ()
         ]
 
         it "should return parent type" <| fun () ->

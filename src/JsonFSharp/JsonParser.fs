@@ -40,6 +40,7 @@ let toInstance<'T> json =
             | JsonString(x) -> toObj x
             | JsonNumber(x) -> toObj x
             | JsonBool(x) -> toObj x
+            | JsonNull -> toObj null
             | _ -> failwith "Not implemented"
 
         match json with
