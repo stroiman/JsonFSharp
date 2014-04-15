@@ -1,4 +1,5 @@
 ﻿module TypeConversionSpec
+open System.Text.RegularExpressions
 open FSpec.Core.DslV2
 open FSpec.Core.MatchersV2
 open JsonFSharp
@@ -17,6 +18,10 @@ let getSuccess = function
 
 let stringToJson = JsonInput.fromString >> parse >> getSuccess
 let jsonToObj<'T> = toInstance<'T> >> getSuccess
+let getFailure value = 
+    match value with
+    | Success(_) -> failwith "Expected failure, was success"
+    | Failure(x) -> x
 
 let specs = 
     describe "Type conversions" [
@@ -42,4 +47,13 @@ let specs =
                 |> jsonToObj<ParentType>
             value.child.foo |> should equal 42
             value.bar |> should equal 43
+
+        describe "when json does not contain correct parameter" [
+            it "should return a proper error type" <| fun () ->
+                """{ "bar": 42 }"""
+                |> stringToJson
+                |> toInstance<FooTypeWithInt>
+                |> getFailure
+                |> should matchRegex "could not find data for record value 'foo'"
+        ]
     ]

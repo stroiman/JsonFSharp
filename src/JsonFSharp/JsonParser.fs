@@ -30,26 +30,49 @@ let toInstance<'T> json =
         | JsonString(x) -> x :> System.Object
         | JsonNumber(x) -> x :> System.Object
         | _ -> failwith "Not implemented"
-        
+
     let rec toInstanceOfType (targetType: System.Type) json =
+
         match json with
         | JsonObject(obj) ->
-            let getValue name = obj.[name]
+            let getValue = obj.TryFind
+            let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
+                let jsonValueOption = getValue arg.Name
+                match jsonValueOption with
+                | None -> Failure(sprintf "could not find data for record value '%s'" arg.Name)
+                | Some(jsonValue) ->
+                    match jsonValue with
+                    | JsonObject(x) ->
+                        match toInstanceOfType arg.ParameterType jsonValue with
+                        | Success(x) -> Success(x)
+                        | Failure(x) -> Failure(x)
+                    | _ ->
+                        let value = jsonValue |> getObjectData
+                        Success(System.Convert.ChangeType(value, arg.ParameterType))
+
+            let rec getConstructorParameters (args: System.Reflection.ParameterInfo list) =
+                match args with
+                | [] -> Success([])
+                | head::tail ->
+                    match getConstructorParameters tail with
+                    | Failure(x) -> Failure(x)
+                    | Success(x) -> 
+                        match getConstructorArgument head with
+                        | Success(y) -> Success(y :: x)
+                        | Failure(y) -> Failure(y)
+
             let ctor = targetType.GetConstructors().Single()
             let ctorParameters = 
                 ctor.GetParameters() 
                 |> Array.toList
-                |> List.map (fun param -> 
-                    let jsonValue = getValue param.Name
-                    match jsonValue with
-                    | JsonObject(x) -> toInstanceOfType param.ParameterType jsonValue
-                    | _ ->
-                        let value = jsonValue |> getObjectData
-                        System.Convert.ChangeType(value, param.ParameterType))
-                |> List.toArray
-            ctor.Invoke(ctorParameters)
-        | _ -> failwith "Not an object"
+                |> getConstructorParameters
+            match ctorParameters with
+            | Success(x) -> Success(ctor.Invoke(x |> List.toArray))
+            | Failure(x) -> Failure(x)
+        | _ -> Failure("Not an object")
 
     let targetType = typeof<'T>
-    Success(toInstanceOfType targetType json :?> 'T)
+    match toInstanceOfType targetType json with
+    | Success(x) -> Success(x :?> 'T)
+    | Failure(x) -> Failure(x)
 
