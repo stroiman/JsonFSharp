@@ -7,6 +7,7 @@ open JsonParser
 
 type FooTypeWithString = { foo : string; }
 type FooTypeWithInt = { foo : int; }
+type FooTypeWithBools = { t: bool; f: bool }
 type ParentType = {
     child: FooTypeWithInt;
     bar: int
@@ -38,6 +39,13 @@ let specs =
                     |> stringToJson
                     |> jsonToObj<FooTypeWithInt>
                 value.foo |> should equal 42
+            it "can initialize boolean values" <| fun () ->
+                let value =
+                    """{ "t": true, "f": false }"""
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithBools>
+                value.t |> should equal true
+                value.f |> should equal false
         ]
 
         it "should return parent type" <| fun () ->
