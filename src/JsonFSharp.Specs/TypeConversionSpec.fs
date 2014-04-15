@@ -4,17 +4,10 @@ open FSpec.Core.MatchersV2
 open JsonFSharp
 open JsonParser
 
-type FooType = {
-    foo : string;
-    foo2: int
-    }
-
-type ChildType = {
-    foo: int
-    }
-
+type FooTypeWithString = { foo : string; }
+type FooTypeWithInt = { foo : int; }
 type ParentType = {
-    child: ChildType;
+    child: FooTypeWithInt;
     bar: int
     }
 
@@ -27,12 +20,20 @@ let jsonToObj<'T> = toInstance<'T> >> getSuccess
 
 let specs = 
     describe "Type conversions" [
-        it "should return instance of specified type" <| fun () ->
-            let value = 
-                """{ "foo": "bar", "foo2": 42 }"""      
-                |> stringToJson
-                |> jsonToObj<FooType>
-            value.foo |> should equal "bar"
+        describe "Simple type conversions" [
+            it "an initialize string values" <| fun () ->
+                let value = 
+                    """{ "foo": "bar" }"""      
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithString>
+                value.foo |> should equal "bar"
+            it "can initialize integer values" <| fun () ->
+                let value = 
+                    """{ "foo": 42 }"""      
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithInt>
+                value.foo |> should equal 42
+        ]
 
         it "should return parent type" <| fun () ->
             let value =
