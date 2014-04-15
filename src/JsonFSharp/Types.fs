@@ -27,3 +27,15 @@ module TwoTrack =
 
     let (>>=) twoTrackInput switchFunction = 
         bind switchFunction twoTrackInput 
+
+    let rec bindList map l =
+        match l with
+        | [] -> Success([])
+        | head::tail ->
+             match map head with
+             | Failure f -> Failure f
+             | Success h ->
+                match bindList map tail with
+                | Failure f -> Failure f
+                | Success t -> Success(h::t)
+

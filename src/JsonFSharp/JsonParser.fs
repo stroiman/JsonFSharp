@@ -52,23 +52,11 @@ let toInstance<'T> json =
                 getValue arg.Name
                 >>= coerceToType arg.ParameterType
 
-            let rec getConstructorParameters (args: System.Reflection.ParameterInfo list) =
-                match args with
-                | [] -> Success([])
-                | head::tail ->
-                    getConstructorArgument head 
-                    |> bind (fun head -> 
-                        getConstructorParameters tail 
-                        |> bind (fun tail -> Success(head::tail)))
-
             let ctor = targetType.GetConstructors().Single()
-            let ctorParameters = 
-                ctor.GetParameters() 
-                |> Array.toList
-                |> getConstructorParameters
-            match ctorParameters with
-            | Success(x) -> Success(ctor.Invoke(x |> List.toArray))
-            | Failure(x) -> Failure(x)
+            ctor.GetParameters() 
+            |> Array.toList
+            |> bindList getConstructorArgument
+            >>= fun x -> Success(ctor.Invoke(x |> List.toArray))
         | _ -> Failure("Not an object")
 
     let targetType = typeof<'T>
