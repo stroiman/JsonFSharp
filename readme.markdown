@@ -83,7 +83,7 @@ and simple types. But no tuples or discriminated unions.
 There is currently not a plan to implement this until I need them (or somebody
 requests it)
 
-* The record construction simply uses reflection to find a single constructor
+\* The record construction simply uses reflection to find a single constructor
   and retrieve all the required parameters from the json data. So if you have a
 class with a single argument, and all necessary data is passed through the
 constructor, it think that would work as well. But it's not supported, and not
