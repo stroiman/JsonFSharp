@@ -1,3 +1,0 @@
-[submodule "src/lib/fspec"]
-	path = src/lib/fspec
-	url = git@github.com:PeteProgrammer/fspec.git
