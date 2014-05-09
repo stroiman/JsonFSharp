@@ -1,7 +1,7 @@
 ﻿module TypeConversionSpec
 open System.Text.RegularExpressions
-open FSpec.Core.DslV2
-open FSpec.Core.MatchersV2
+open FSpec.Core.Dsl
+open FSpec.Core.Matchers
 open JsonFSharp
 open JsonParser
 
@@ -33,19 +33,19 @@ let getFailure value =
 let specs = 
     describe "Type conversions" [
         describe "Simple type conversions" [
-            it "an initialize string values" <| fun () ->
+            it "an initialize string values" <| fun _ ->
                 let value = 
                     """{ "foo": "bar" }"""      
                     |> stringToJson
                     |> jsonToObj<FooTypeWithString>
                 value.foo |> should equal "bar"
-            it "can initialize integer values" <| fun () ->
+            it "can initialize integer values" <| fun _ ->
                 let value = 
                     """{ "foo": 42 }"""      
                     |> stringToJson
                     |> jsonToObj<FooTypeWithInt>
                 value.foo |> should equal 42
-            it "can initialize boolean values" <| fun () ->
+            it "can initialize boolean values" <| fun _ ->
                 let value =
                     """{ "t": true, "f": false }"""
                     |> stringToJson
@@ -54,14 +54,14 @@ let specs =
                 value.f |> should equal false
         ]
         describe "null values" [
-            it "Converts null to Option.None for option types" <| fun () ->
+            it "Converts null to Option.None for option types" <| fun _ ->
                 let value =
                     """{ "foo": null }"""
                     |> stringToJson
                     |> jsonToObj<FooTypeWithIntOption>
                 value.foo |> should equal None
 
-            it "Fails when type is not an option type" <| fun () ->
+            it "Fails when type is not an option type" <| fun _ ->
                 let value = 
                     """{ "foo": null }"""
                     |> stringToJson
@@ -72,14 +72,14 @@ let specs =
         ]
 
         describe "array values" [
-            it "converts the data to a compatible list" <| fun () ->
+            it "converts the data to a compatible list" <| fun _ ->
                 let value =
                     """{ "foo": [1, 2] }"""
                     |> stringToJson
                     |> jsonToObj<FooTypeWithIntList>
                 value.foo |> should equal [1; 2]
 
-            it "converts arrays with objects" <| fun () ->
+            it "converts arrays with objects" <| fun _ ->
                 let value =
                     """{ "children": [ {"foo": 1}, {"foo": 2} ], "bar": 3}"""
                     |> stringToJson
@@ -88,7 +88,7 @@ let specs =
                 value |> should equal expected
         ]
 
-        it "should return parent type" <| fun () ->
+        it "should return parent type" <| fun _ ->
             let value =
                 """{ "child": { "foo": 42 }, "bar": 43 }"""
                 |> stringToJson
@@ -98,7 +98,7 @@ let specs =
 
         describe "type mismatch" [
             describe "when json does not contain correct parameter" [
-                it "should return a proper error type" <| fun () ->
+                it "should return a proper error type" <| fun _ ->
                     """{ "bar": 42 }"""
                     |> stringToJson
                     |> toInstance<FooTypeWithInt>
@@ -106,7 +106,7 @@ let specs =
                     |> should matchRegex "could not find data for record value 'foo'"
             ]
             describe "when json data and record value are incompatible" [
-                it "should return a proper error type" <| fun () ->
+                it "should return a proper error type" <| fun _ ->
                     """{ "foo": "bar" }"""
                     |> stringToJson
                     |> toInstance<FooTypeWithInt>

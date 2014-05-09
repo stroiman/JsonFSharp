@@ -1,6 +1,6 @@
 ﻿module Helpers
-open FSpec.Core.DslV2
-open FSpec.Core.MatchersV2
+open FSpec.Core.Dsl
+open FSpec.Core.Matchers
 open JsonFSharp
 open JsonParser
 
@@ -17,7 +17,7 @@ let shouldEqualObject expectedProperties actual =
     actual |> shouldEqualJson expected
 
 let spec name input expected =
-    it name <| fun () ->
+    it name <| fun _ ->
         input
         |> parseString
         |> shouldEqualJson expected

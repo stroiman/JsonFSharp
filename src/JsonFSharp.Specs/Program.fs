@@ -1,13 +1,7 @@
-﻿open FSpec.Core.DslV2
+﻿open FSpec.Core.TestDiscovery
 
 let summary =
-    [ PrimitiveTypesSpec.specs
-      ErrorHandlingSpecs.specs
-      ArraySpecs.specs
-      ObjectSpecs.specs
-      InputTypesSpecs.specs
-      TypeConversionSpec.specs ]
-    |> List.map run
-    |> List.map getSummary
-    |> List.sum
-printfn "Summary: %A" summary
+    System.Reflection.Assembly.GetExecutingAssembly()
+    |> getSpecsFromAssembly
+    |> runSpecs
+    |> toExitCode

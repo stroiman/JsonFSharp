@@ -1,23 +1,23 @@
 ﻿module ObjectSpecs
-open FSpec.Core.DslV2
-open FSpec.Core.MatchersV2
+open FSpec.Core.Dsl
+open FSpec.Core.Matchers
 open JsonFSharp
 open Helpers
 
 let specs =
     describe "Object parsing" [
-        it "parses simple object" <| fun () ->
+        it "parses simple object" <| fun _ ->
             "{}"
             |> parseString
             |> shouldEqualJson (JsonObject Map.empty)
 
-        it "parses object with one property" <| fun () ->
+        it "parses object with one property" <| fun _ ->
             let expected = [("key", JsonString("value"))]
             """{"key":"value"}"""
             |> parseString
             |> shouldEqualObject expected
 
-        it "parses object with two properties" <| fun () ->
+        it "parses object with two properties" <| fun _ ->
             let expected = [
                 ("a", JsonString("value a"))
                 ("b", JsonString("value b"))]
@@ -25,7 +25,7 @@ let specs =
             |> parseString
             |> shouldEqualObject expected
 
-        it "ignores white space" <| fun () ->
+        it "ignores white space" <| fun _ ->
             let expected = [
                 ("a", JsonString("value a"))
                 ("b", JsonString("value b"))]
@@ -35,7 +35,7 @@ let specs =
             |> parseString
             |> shouldEqualObject expected
 
-        it "parses nested objects" <| fun () ->
+        it "parses nested objects" <| fun _ ->
             let expected = [
                 ("a", JsonObject(["b", JsonNumber(42.0)] |> Map.ofList))]
             """{ "a": { "b": 42 } }"""

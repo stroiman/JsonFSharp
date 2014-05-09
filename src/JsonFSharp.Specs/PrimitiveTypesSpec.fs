@@ -1,6 +1,6 @@
 ﻿module PrimitiveTypesSpec
-open FSpec.Core.DslV2
-open FSpec.Core.MatchersV2
+open FSpec.Core.Dsl
+open FSpec.Core.Matchers
 open JsonFSharp
 open Helpers
 
@@ -23,7 +23,7 @@ let specs =
                 stringSpec "parses string containg \\b" "\"dummy1\\bdummy2\"" "dummy1\bdummy2"
 
                 describe "bad unicode values" [
-                    it "fails when unicode contains 3 characters" <| fun () ->
+                    it "fails when unicode contains 3 characters" <| fun _ ->
                         let result = "\"\\u123\"" |> parseString
                         match result with
                         | Success(_) -> failwith "Expected fail"
