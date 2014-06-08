@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSpec.Core">
-      <HintPath>..\packages\fspec.0.0.1\lib\net40\fspec.core.dll</HintPath>
+      <HintPath>..\packages\fspec.0.0.7\lib\net40\FSpec.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
