@@ -41,27 +41,25 @@ let toInstance<'T> json =
             | e -> Failure "incompatible types"
 
     let rec toInstanceOfType (targetType: System.Type) json =
+        let converter = new Converter()
         let rec coerceToType targetType jsonValue  =
             let toObj value = changeType targetType value
             match jsonValue with
-            | JsonObject(x) -> toInstanceOfType targetType jsonValue 
-            | JsonString(x) -> toObj x
-            | JsonNumber(x) -> toObj x
-            | JsonBool(x) -> toObj x
+            | JsonObject x -> toInstanceOfType targetType jsonValue 
+            | JsonString x -> toObj x
+            | JsonNumber x -> toObj x
+            | JsonBool x -> toObj x
             | JsonNull -> toObj null
-            | JsonArray(x) ->
+            | JsonArray arr ->
                 if not(targetType.IsGenericType) then failwith "Not a generic type"
                 if not(targetType.GetGenericTypeDefinition().Name.StartsWith("FSharpList")) then failwith "Not a list type"
                 let listType = targetType.GetGenericArguments().Single()
-                let temp = 
-                    x 
-                    |> List.map (fun x -> 
+                arr |> List.map (fun x -> 
                         match coerceToType listType x with
                         | Failure f -> failwith "not supported yet"
                         | Success s -> s)
-                let converter = new Converter()
-                let result = converter.changeListToType listType temp
-                Success(result)
+                |> converter.changeListToType listType 
+                |> Success
 
         match json with
         | JsonObject(obj) ->
