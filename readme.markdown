@@ -77,8 +77,25 @@ cannot be converted to the correct type (e.g. if age had been a string in the
 json), a Failure will be returned. No Failure is returned if there are 'too
 many' values in the json, as long as all the record members can be evaluated.
 
-The record construction supports records (no classes)*, arrays, option values,
+The record construction supports records (no classes)\*, arrays, option values,
 and simple types. But no tuples or discriminated unions. 
+
+It does however support deserializing to a map.
+
+```fsharp
+type FooType = { foo : int; }
+type ParentTypeWithMap = {
+        children: Map<string,FooType>
+    }
+"""{ "children": {
+       "a" : { "foo": 42 },
+       "b" : { "foo": 43 } } }"""
+|> JsonInput.FromString
+|> parse
+>>= toInstance<ParentTypeWithMap>
+```
+
+It serializes the children collection into a map with the keys "a" and "b".
 
 There is currently not a plan to implement this until I need them (or somebody
 requests it)
