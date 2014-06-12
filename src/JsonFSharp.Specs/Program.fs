@@ -1,7 +1,6 @@
 ﻿open FSpec.Core.TestDiscovery
 
-let summary =
+[<EntryPoint>]
+let main argv =
     System.Reflection.Assembly.GetExecutingAssembly()
-    |> getSpecsFromAssembly
-    |> runSpecs
-    |> toExitCode
+    |> runSingleAssembly
