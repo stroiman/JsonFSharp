@@ -33,12 +33,38 @@ type Converter() =
         typeof<Converter>.GetMethod("changeListType").MakeGenericMethod(targetType).Invoke(self, [|input|])
     
 
+    member self.toMap<'T> (l:(string*obj) list) =
+        let rec work (l:(string*obj) list) map =
+            match l with
+            | [] -> map
+            | (k,v)::xs -> 
+                map 
+                |> Map.add k (v :?> 'T)
+                |> work xs
+        Map.empty<string,'T> |> work l
+        
+    member self.listToTypedMap (targetType: System.Type) (l:(string*obj) list) =
+        typeof<Converter>.GetMethod("toMap").MakeGenericMethod(targetType).Invoke(self, [|l|])
+
 let toInstance<'T> json =
     let changeType (targetType: System.Type) value = 
         try
             Success(System.Convert.ChangeType(value :> System.Object, targetType))
         with
             | e -> Failure "incompatible types"
+
+    let (|StringMap|_|) (targetType: System.Type) =
+        let mapType = typedefof<Map<_,_>>
+        if not targetType.IsGenericType then
+            None
+        else if targetType.GetGenericTypeDefinition () = mapType then
+            let stringType = typeof<string>
+            match targetType.GetGenericArguments () with
+            | [|stringType;x|] -> Some(x)
+            | _ -> None
+        else
+            None
+        
 
     let rec toInstanceOfType (targetType: System.Type) json =
         let converter = new Converter()
@@ -63,23 +89,34 @@ let toInstance<'T> json =
 
         match json with
         | JsonObject(obj) ->
-            let getValue name = 
-                name 
-                |> obj.TryFind
-                |> Result.FromOption (sprintf "could not find data for record value '%s'" name)
-            
-            let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
-                getValue arg.Name
-                >>= coerceToType arg.ParameterType
+            match targetType with
+            | StringMap t -> 
+                obj 
+                |> Map.toList 
+                |> bindList (fun (x,y) ->
+                    match y |> toInstanceOfType t with
+                    | Success z -> Success (x,z)
+                    | Failure z -> Failure z)
+                |> TwoTrack.bind (converter.listToTypedMap t >> Success)
+            | _ -> 
+                let getValue name = 
+                    name 
+                    |> obj.TryFind
+                    |> Result.FromOption (sprintf "could not find data for record value '%s'" name)
+                
+                let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
+                    getValue arg.Name
+                    >>= coerceToType arg.ParameterType
 
-            let ctor = targetType.GetConstructors().Single()
-            ctor.GetParameters() 
-            |> Array.toList
-            |> bindList getConstructorArgument
-            >>= fun x -> Success(ctor.Invoke(x |> List.toArray))
+                let ctor = targetType.GetConstructors().Single()
+                ctor.GetParameters() 
+                |> Array.toList
+                |> bindList getConstructorArgument
+                >>= fun x -> Success(ctor.Invoke(x |> List.toArray))
         | _ -> Failure("Not an object")
 
     let targetType = typeof<'T>
+    let mapType = typeof<Map<string,_>>
     match toInstanceOfType targetType json with
     | Success(x) -> Success(x :?> 'T)
     | Failure(x) -> Failure(x)

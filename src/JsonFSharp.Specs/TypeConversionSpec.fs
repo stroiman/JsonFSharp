@@ -14,6 +14,9 @@ type ParentType = {
     child: FooTypeWithInt;
     bar: int
     }
+type ParentTypeWithMap = {
+        children: Map<string,FooTypeWithInt>
+    }
 
 type ParentWithList = {
     children : FooTypeWithInt list;
@@ -113,5 +116,28 @@ let specs =
                     |> getFailure
                     |> should matchRegex "incompatible type"
             ]
+        ]
+
+        describe "Target type is a map" [
+            it "Should convert object member names to keys in the map" <| fun _ ->
+                let actual =
+                    """{ "children": {
+                         "a" : { "foo": 42 },
+                         "b" : { "foo": 43 } } }"""
+                    |> stringToJson
+                    |> jsonToObj<ParentTypeWithMap>
+                actual.children.["a"].foo |> should equal 42
+                actual.children.["b"].foo |> should equal 43
+
+            it "should handle when child object is of wrong type" <| fun _ ->
+                let actual =
+                    """{ "children": {
+                         "a" : { "foo": "blah" },
+                         "b" : { "foo": 43 } } }"""
+                    |> stringToJson
+                    |> toInstance<ParentTypeWithMap>
+                match actual with
+                | Failure _ -> ()
+                | Success _ -> failwith "Should be a failure"
         ]
     ]
