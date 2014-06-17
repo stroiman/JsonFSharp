@@ -24,14 +24,12 @@ let parse input =
     with
         | e -> Failure (e.ToString())
 
-
 type Converter() =
     member self.changeListType<'T> (input : System.Object list) =
         input |> List.map (fun x -> x :?> 'T)
 
     member self.changeListToType (targetType : System.Type) (input : System.Object list ) =
         typeof<Converter>.GetMethod("changeListType").MakeGenericMethod(targetType).Invoke(self, [|input|])
-    
 
     member self.toMap<'T> (l:(string*obj) list) =
         let rec work (l:(string*obj) list) map =
@@ -64,7 +62,12 @@ let toInstance<'T> json =
             | _ -> None
         else
             None
-        
+
+    let (|ListType|_|) (t : System.Type) =
+        match t with
+        | x when not(x.IsGenericType) -> None
+        | x when not(x.GetGenericTypeDefinition().Name.StartsWith("FSharpList")) -> None
+        | x -> Some (x.GetGenericArguments().Single())
 
     let rec toInstanceOfType (targetType: System.Type) json =
         let converter = new Converter()
@@ -77,15 +80,15 @@ let toInstance<'T> json =
             | JsonBool x -> toObj x
             | JsonNull -> toObj null
             | JsonArray arr ->
-                if not(targetType.IsGenericType) then failwith "Not a generic type"
-                if not(targetType.GetGenericTypeDefinition().Name.StartsWith("FSharpList")) then failwith "Not a list type"
-                let listType = targetType.GetGenericArguments().Single()
-                arr |> List.map (fun x -> 
-                        match coerceToType listType x with
-                        | Failure f -> failwith "not supported yet"
-                        | Success s -> s)
-                |> converter.changeListToType listType 
-                |> Success
+                match targetType with
+                | ListType t ->
+                    arr |> List.map (fun x -> 
+                            match coerceToType t x with
+                            | Failure f -> failwith "not supported yet"
+                            | Success s -> s)
+                    |> converter.changeListToType t 
+                    |> Success
+                | _ -> Failure "Not a generic list type"
 
         match json with
         | JsonObject(obj) ->
