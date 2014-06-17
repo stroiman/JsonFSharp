@@ -1,7 +1,7 @@
 ﻿module TypeConversionSpec
 open System.Text.RegularExpressions
 open FSpec.Core.Dsl
-open FSpec.Core.Matchers
+open FSpec.Core.MatchersV3
 open JsonFSharp
 open JsonParser
 
@@ -41,20 +41,20 @@ let specs =
                     """{ "foo": "bar" }"""      
                     |> stringToJson
                     |> jsonToObj<FooTypeWithString>
-                value.foo |> should equal "bar"
+                value.foo.Should (equal "bar")
             it "can initialize integer values" <| fun _ ->
                 let value = 
                     """{ "foo": 42 }"""      
                     |> stringToJson
                     |> jsonToObj<FooTypeWithInt>
-                value.foo |> should equal 42
+                value.foo.Should (equal 42)
             it "can initialize boolean values" <| fun _ ->
                 let value =
                     """{ "t": true, "f": false }"""
                     |> stringToJson
                     |> jsonToObj<FooTypeWithBools>
-                value.t |> should equal true
-                value.f |> should equal false
+                value.t.Should be.True
+                value.f.Should be.False
         ]
         describe "null values" [
             it "Converts null to Option.None for option types" <| fun _ ->
@@ -62,7 +62,7 @@ let specs =
                     """{ "foo": null }"""
                     |> stringToJson
                     |> jsonToObj<FooTypeWithIntOption>
-                value.foo |> should equal None
+                value.foo.Should (equal None)
 
             it "Fails when type is not an option type" <| fun _ ->
                 let value = 
@@ -80,7 +80,7 @@ let specs =
                     """{ "foo": [1, 2] }"""
                     |> stringToJson
                     |> jsonToObj<FooTypeWithIntList>
-                value.foo |> should equal [1; 2]
+                value.foo.Should (equal [1; 2])
 
             it "converts arrays with objects" <| fun _ ->
                 let value =
@@ -88,7 +88,7 @@ let specs =
                     |> stringToJson
                     |> jsonToObj<ParentWithList>
                 let expected = { children=[{foo= 1};{foo= 2}];bar= 3}
-                value |> should equal expected
+                value.Should (equal expected)
         ]
 
         it "should return parent type" <| fun _ ->
@@ -96,8 +96,8 @@ let specs =
                 """{ "child": { "foo": 42 }, "bar": 43 }"""
                 |> stringToJson
                 |> jsonToObj<ParentType>
-            value.child.foo |> should equal 42
-            value.bar |> should equal 43
+            value.child.foo.Should (equal 42)
+            value.bar.Should (equal 43)
 
         describe "type mismatch" [
             describe "when json does not contain correct parameter" [
@@ -106,7 +106,7 @@ let specs =
                     |> stringToJson
                     |> toInstance<FooTypeWithInt>
                     |> getFailure
-                    |> should matchRegex "could not find data for record value 'foo'"
+                    |> should (be.string.matching "could not find data for record value 'foo'")
             ]
             describe "when json data and record value are incompatible" [
                 it "should return a proper error type" <| fun _ ->
@@ -114,7 +114,7 @@ let specs =
                     |> stringToJson
                     |> toInstance<FooTypeWithInt>
                     |> getFailure
-                    |> should matchRegex "incompatible type"
+                    |> should (be.string.matching "incompatible type")
             ]
         ]
 
@@ -126,8 +126,8 @@ let specs =
                          "b" : { "foo": 43 } } }"""
                     |> stringToJson
                     |> jsonToObj<ParentTypeWithMap>
-                actual.children.["a"].foo |> should equal 42
-                actual.children.["b"].foo |> should equal 43
+                actual.children.["a"].foo.Should (equal 42)
+                actual.children.["b"].foo.Should (equal 43)
 
             it "should handle when child object is of wrong type" <| fun _ ->
                 let actual =
