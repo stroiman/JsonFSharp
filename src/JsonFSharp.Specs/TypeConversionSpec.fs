@@ -9,6 +9,7 @@ type FooTypeWithString = { foo : string; }
 type FooTypeWithInt = { foo : int; }
 type FooTypeWithIntOption = { foo : int option; }
 type FooTypeWithBools = { t: bool; f: bool }
+type FooTypeWithTuple = { foo : int * int }
 type FooTypeWithIntList = { foo: int list }
 type ParentType = {
     child: FooTypeWithInt;
@@ -32,6 +33,8 @@ let getFailure value =
     match value with
     | Success(_) -> failwith "Expected failure, was success"
     | Failure(x) -> x
+
+let beFailure = createSimpleMatcher (function | Failure _ -> true | _ -> false)
 
 let specs = 
     describe "Type conversions" [
@@ -139,5 +142,34 @@ let specs =
                 match actual with
                 | Failure _ -> ()
                 | Success _ -> failwith "Should be a failure"
+        ]
+
+        ("focus" <<- true)
+        describe "Target type contains a tuple" [
+            it "fails when source does not contain an array" <| fun _ ->
+                """{ "foo": 42 }"""
+                |> stringToJson
+                |> toInstance<FooTypeWithTuple>
+                |> should beFailure
+
+            it "succeeds when source is an array" <| fun _ ->
+                """{ "foo": [42,43] }"""
+                |> stringToJson
+                |> jsonToObj<FooTypeWithTuple>
+                |> (fun x -> x.foo)
+                |> should (equal (42,43))
+              
+            it "fails when source array is not long enough" <| fun _ ->
+                """{ "foo": [42] }"""
+                |> stringToJson
+                |> toInstance<FooTypeWithTuple>
+                |> should beFailure
+
+            it "ignores extra data in source array" <| fun _ ->
+                """{ "foo": [42,43,44] }"""
+                |> stringToJson
+                |> jsonToObj<FooTypeWithTuple>
+                |> (fun x -> x.foo)
+                |> should (equal (42,43))
         ]
     ]

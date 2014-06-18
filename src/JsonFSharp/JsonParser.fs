@@ -4,6 +4,7 @@ open JsonFSharp.Lexer
 open JsonFSharp.Parsers
 open System.Linq
 open TwoTrack
+open Microsoft.FSharp.Reflection
 
 type JsonInput =
     | StringInput of string
@@ -68,6 +69,22 @@ let toInstance<'T> json =
         | x when not(x.IsGenericType) -> None
         | x when not(x.GetGenericTypeDefinition().Name.StartsWith("FSharpList")) -> None
         | x -> Some (x.GetGenericArguments().Single())
+    let (|TupleType|_|) (t : System.Type) =
+        if (Microsoft.FSharp.Reflection.FSharpType.IsTuple t) then
+            Some t
+        else None
+
+    let invokeCtor (targetType : System.Type) args =
+        let ctor = targetType.GetConstructors().Single()
+        args |> List.toArray |> ctor.Invoke |> Success
+
+    let rec pairWith source target =
+        match (source,target) with
+        | (x::xs,y::ys) -> 
+            (pairWith xs ys)
+            |> bind (fun z -> Success ((x,y)::z))
+        | (_,[]) -> Success []
+        | ([],_) -> Failure "Not enough elements"
 
     let rec toInstanceOfType (targetType: System.Type) json =
         let converter = new Converter()
@@ -81,6 +98,21 @@ let toInstance<'T> json =
             | JsonNull -> toObj null
             | JsonArray arr ->
                 match targetType with
+                | TupleType t ->
+                    let folder state targetType = 
+                        match state with
+                        | Failure x -> Failure x
+                        | Success (x,y) ->
+                            match y with
+                            | [] -> Failure "Not enough array elements"
+                            | y::z -> 
+                                coerceToType targetType y |> TwoTrack.bind (fun b -> Success (b::x,z))
+                    FSharpType.GetTupleElements t
+                    |> Array.toList
+                    |> pairWith arr
+                    >>= bindList (fun (x,targetType) -> coerceToType targetType x)
+                    >>= (invokeCtor targetType)
+
                 | ListType t ->
                     arr |> List.map (fun x -> 
                             match coerceToType t x with
@@ -115,7 +147,8 @@ let toInstance<'T> json =
                 ctor.GetParameters() 
                 |> Array.toList
                 |> bindList getConstructorArgument
-                >>= fun x -> Success(ctor.Invoke(x |> List.toArray))
+                >>= invokeCtor targetType
+
         | _ -> Failure("Not an object")
 
     let targetType = typeof<'T>
