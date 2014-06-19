@@ -129,7 +129,7 @@ let toInstance<'T> json =
                 obj 
                 |> Map.toList 
                 |> bindList (fun (x,y) ->
-                    match y |> toInstanceOfType t with
+                    match y |> coerceToType t with
                     | Success z -> Success (x,z)
                     | Failure z -> Failure z)
                 |> TwoTrack.bind (converter.listToTypedMap t >> Success)

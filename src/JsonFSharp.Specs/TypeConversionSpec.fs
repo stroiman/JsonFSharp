@@ -15,6 +15,9 @@ type ParentType = {
     child: FooTypeWithInt;
     bar: int
     }
+type ParentTypeWithMapOfInt = {
+        children: Map<string,int>
+    }
 type ParentTypeWithMap = {
         children: Map<string,FooTypeWithInt>
     }
@@ -142,9 +145,17 @@ let specs =
                 match actual with
                 | Failure _ -> ()
                 | Success _ -> failwith "Should be a failure"
+
+            it "should handle when child object is not an object" <| fun _ ->
+                let actual =
+                    """{ "children": {
+                         "a" : 42,
+                         "b" : 43 } }"""
+                    |> stringToJson
+                    |> jsonToObj<ParentTypeWithMapOfInt>
+                actual.children.["a"].Should (equal 42)
         ]
 
-        ("focus" <<- true)
         describe "Target type contains a tuple" [
             it "fails when source does not contain an array" <| fun _ ->
                 """{ "foo": 42 }"""
