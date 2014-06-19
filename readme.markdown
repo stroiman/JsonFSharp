@@ -78,9 +78,10 @@ json), a Failure will be returned. No Failure is returned if there are 'too
 many' values in the json, as long as all the record members can be evaluated.
 
 The record construction supports records (no classes)\*, arrays, option values,
-and simple types. But no tuples or discriminated unions. 
+F# tuples from json arrays, maps of strings, and simple types. But no
+discriminated unions. 
 
-It does however support deserializing to a map.
+Map deserialization example
 
 ```fsharp
 type FooType = { foo : int; }
@@ -97,11 +98,23 @@ type ParentTypeWithMap = {
 
 It serializes the children collection into a map with the keys "a" and "b".
 
-There is currently not a plan to implement this until I need them (or somebody
-requests it)
+Tuple deserialization exampel
+
+```fsharp
+type FooType = int * int * string
+type ParentTypeWithTupleArray = {
+        Children: FooType list
+    }
+"""{ "children": [
+	[1,2,"foo"],
+	[3,4,"bar"]] """
+|> JsonInput.FromString
+|> parse
+>>= toInstance<ParentTypeWithTupleArray>
+```
 
 \* The record construction simply uses reflection to find a single constructor
   and retrieve all the required parameters from the json data. So if you have a
 class with a single argument, and all necessary data is passed through the
-constructor, it think that would work as well. But it's not supported, and not
+constructor, I think that would work as well. But it's not supported, and not
 a priority.
