@@ -50,7 +50,7 @@ let toInstance<'T> json =
         try
             Success(System.Convert.ChangeType(value :> System.Object, targetType))
         with
-            | e -> Failure "incompatible types"
+            | e -> Failure (sprintf "cannot change to type %A - json: %A" targetType.Name value)
 
     let (|StringMap|_|) (targetType: System.Type) =
         let mapType = typedefof<Map<_,_>>

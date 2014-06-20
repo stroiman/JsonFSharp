@@ -120,7 +120,7 @@ let specs =
                     |> stringToJson
                     |> toInstance<FooTypeWithInt>
                     |> getFailure
-                    |> should (be.string.matching "incompatible type")
+                    |> should (be.string.matching "cannot change to type")
             ]
         ]
 
