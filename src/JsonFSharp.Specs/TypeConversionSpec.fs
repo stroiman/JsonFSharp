@@ -5,42 +5,50 @@ open FSpec.Core.MatchersV3
 open JsonFSharp
 open JsonParser
 
-type FooTypeWithString = { foo : string; }
-type FooTypeWithInt = { foo : int; }
-type FooTypeWithIntOption = { foo : int option; }
-type FooTypeWithBools = { t: bool; f: bool }
-type FooTypeWithTuple = { foo : int * int }
-type FooTypeWithIntList = { foo: int list }
-type ParentType = {
-    child: FooTypeWithInt;
-    bar: int
-    }
-type ParentTypeWithMapOfInt = {
-        children: Map<string,int>
-    }
-type ParentTypeWithMap = {
-        children: Map<string,FooTypeWithInt>
-    }
+module Helpers =
+  type FooTypeWithString = { foo : string; }
+  type FooTypeWithInt = { foo : int; }
+  type FooTypeWithIntOption = { foo : int option; }
+  type FooTypeWithBools = { t: bool; f: bool }
+  type FooTypeWithTuple = { foo : int * int }
+  type FooTypeWithIntList = { foo: int list }
+  type ParentType = {
+      child: FooTypeWithInt;
+      bar: int
+      }
+  type ParentTypeWithMapOfInt = {
+          children: Map<string,int>
+      }
+  type ParentTypeWithMap = {
+          children: Map<string,FooTypeWithInt>
+      }
 
-type ParentWithList = {
-    children : FooTypeWithInt list;
-    bar : int }
+  type ParentWithList = {
+      children : FooTypeWithInt list;
+      bar : int }
 
-let getSuccess = function
-    | Success(x) -> x
-    | Failure(x) -> failwith x
+  let getSuccess = function
+      | Success(x) -> x
+      | Failure(x) -> failwith x
 
-let stringToJson = JsonInput.fromString >> parse >> getSuccess
-let jsonToObj<'T> = toInstance<'T> >> getSuccess
-let getFailure value = 
-    match value with
-    | Success(_) -> failwith "Expected failure, was success"
-    | Failure(x) -> x
+  let stringToJson = JsonInput.fromString >> parse >> getSuccess
+  let jsonToObj<'T> = toInstance<'T> >> getSuccess
+  let getFailure value = 
+      match value with
+      | Success(_) -> failwith "Expected failure, was success"
+      | Failure(x) -> x
 
-let beFailure = createSimpleMatcher (function | Failure _ -> true | _ -> false)
+  let beFailure = createSimpleMatcher (function | Failure _ -> true | _ -> false)
+open Helpers
 
 let specs = 
     describe "Type conversions" [
+        describe "primitive type conversions" [
+            it "converts simple json types" <| fun _ ->
+                JsonNumber 42.0
+                |> jsonToObj<int>
+                |> should (equal 42)
+        ]
         describe "Simple type conversions" [
             it "an initialize string values" <| fun _ ->
                 let value = 

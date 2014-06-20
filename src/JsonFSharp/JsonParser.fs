@@ -149,7 +149,7 @@ let toInstance<'T> json =
                 |> bindList getConstructorArgument
                 >>= invokeCtor targetType
 
-        | _ -> Failure("Not an object")
+        | x -> coerceToType targetType x
 
     let targetType = typeof<'T>
     let mapType = typeof<Map<string,_>>
