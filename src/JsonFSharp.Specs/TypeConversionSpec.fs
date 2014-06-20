@@ -12,6 +12,7 @@ module Helpers =
   type FooTypeWithBools = { t: bool; f: bool }
   type FooTypeWithTuple = { foo : int * int }
   type FooTypeWithIntList = { foo: int list }
+  type FooTypeWithJsonValue = { foo : JsonValue }
   type ParentType = {
       child: FooTypeWithInt;
       bar: int
@@ -190,5 +191,14 @@ let specs =
                 |> jsonToObj<FooTypeWithTuple>
                 |> (fun x -> x.foo)
                 |> should (equal (42,43))
+        ]
+
+        describe "Target type contains a JsonValue property" [
+            it "is initialized with the raw JsonValue type" <| fun _ ->
+                """{ "foo": 42 }"""
+                |> stringToJson
+                |> jsonToObj<FooTypeWithJsonValue>
+                |> (fun x -> x.foo)
+                |> should (equal (JsonNumber 42.0))
         ]
     ]

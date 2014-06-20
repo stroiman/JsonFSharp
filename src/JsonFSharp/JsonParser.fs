@@ -89,6 +89,9 @@ let toInstance<'T> json =
     let rec toInstanceOfType (targetType: System.Type) json =
         let converter = new Converter()
         let rec coerceToType targetType jsonValue  =
+          if (targetType = typeof<JsonValue>) then 
+            jsonValue :> obj |> Success
+          else
             let toObj value = changeType targetType value
             match jsonValue with
             | JsonObject x -> toInstanceOfType targetType jsonValue 
@@ -148,7 +151,6 @@ let toInstance<'T> json =
                 |> Array.toList
                 |> bindList getConstructorArgument
                 >>= invokeCtor targetType
-
         | x -> coerceToType targetType x
 
     let targetType = typeof<'T>
