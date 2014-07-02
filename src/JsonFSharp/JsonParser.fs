@@ -1,7 +1,7 @@
 ﻿module JsonFSharp.JsonParser
 open System.IO
-open JsonFSharp.Lexer
-open JsonFSharp.Parsers
+open JsonFSharp.Internals
+open JsonFSharp.Internals.Lexer
 open System.Linq
 open TwoTrack
 open Microsoft.FSharp.Reflection

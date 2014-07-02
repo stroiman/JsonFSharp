@@ -44,7 +44,7 @@
     <None Include="Script.fsx" />
     <Compile Include="Types.fs" />
     <FsYacc Include="Parser.fsy">
-      <OtherFlags>--module JsonFSharp.Parsers</OtherFlags>
+      <OtherFlags>--module JsonFSharp.Internals.Parsers</OtherFlags>
     </FsYacc>
     <FsLex Include="Lexer.fsl">
       <OtherFlags>--unicode</OtherFlags>
