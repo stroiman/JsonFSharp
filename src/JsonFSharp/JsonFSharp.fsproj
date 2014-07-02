@@ -59,7 +59,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
   <Target Name="GenerateParser">
-    <Exec Command="..\lib\powerpack\fsyacc parser.fsy -o Parser.fs --module JsonFSharp.Parsers" />
+    <Exec Command="..\lib\powerpack\fsyacc parser.fsy -o Parser.fs --module JsonFSharp.Internals.Parsers" />
   </Target>
   <Target Name="GenerateLexer">
     <Exec Command="..\lib\powerpack\fslex lexer.fsl -o Lexer.fs --unicode" />

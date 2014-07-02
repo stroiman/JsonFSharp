@@ -1,9 +1,9 @@
 # 1 "lexer.fsl"
  
-module JsonFSharp.Lexer
+module JsonFSharp.Internals.Lexer
 open System
 open System.Globalization
-open JsonFSharp.Parsers
+open JsonFSharp.Internals.Parsers
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
 let lexeme = Lexing.LexBuffer<_>.LexemeString 
