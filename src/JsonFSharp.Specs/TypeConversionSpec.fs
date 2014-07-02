@@ -4,6 +4,7 @@ open FSpec.Dsl
 open FSpec.Matchers
 open JsonFSharp
 open JsonParser
+open JsonConverter
 
 module Helpers =
   type FooTypeWithString = { foo : string; }
