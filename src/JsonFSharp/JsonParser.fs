@@ -27,12 +27,12 @@ let parse input =
     with
         | e -> Failure (e.ToString())
 
-type Converter() =
+type TypeConverter() =
     member self.changeListType<'T> (input : System.Object list) =
         input |> List.map (fun x -> x :?> 'T)
 
     member self.changeListToType (targetType : System.Type) (input : System.Object list ) =
-        typeof<Converter>.GetMethod("changeListType").MakeGenericMethod(targetType).Invoke(self, [|input|])
+        typeof<TypeConverter>.GetMethod("changeListType").MakeGenericMethod(targetType).Invoke(self, [|input|])
         |> Success
 
     member self.toMap<'T> (l:(string*obj) list) =
@@ -46,7 +46,7 @@ type Converter() =
         Map.empty<string,'T> |> work l
         
     member self.listToTypedMap (targetType: System.Type) (l:(string*obj) list) =
-        typeof<Converter>.GetMethod("toMap").MakeGenericMethod(targetType).Invoke(self, [|l|])
+        typeof<TypeConverter>.GetMethod("toMap").MakeGenericMethod(targetType).Invoke(self, [|l|])
         |> Success
 
 let toInstance<'T> json =
@@ -96,7 +96,7 @@ let toInstance<'T> json =
         | (_,[]) -> Success []
         | ([],_) -> Failure "Not enough elements"
 
-    let converter = new Converter()
+    let converter = new TypeConverter()
     let rec coerceToType (targetType: System.Type) (json:JsonValue) =
         let toObj value = changeType targetType value
         match targetType with
