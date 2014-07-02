@@ -26,4 +26,15 @@ let stringSpec name input expectedOutput =
     spec name input (JsonString expectedOutput)
 
 let numberSpec name input expectedOutput =
-    spec name input (JsonNumber expectedOutput)
+    examples [
+        context "When using a US locale" [
+            before <| fun _ -> System.Threading.Thread.CurrentThread.CurrentCulture <- System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
+            
+            spec name input (JsonNumber expectedOutput)
+        ]
+        context "When using a da-DK locale" [
+            before <| fun _ -> System.Threading.Thread.CurrentThread.CurrentCulture <- System.Globalization.CultureInfo.CreateSpecificCulture("da-DK")
+
+            spec name input (JsonNumber expectedOutput)
+        ]
+    ]

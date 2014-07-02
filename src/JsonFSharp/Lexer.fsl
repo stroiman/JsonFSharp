@@ -6,6 +6,7 @@ open JsonFSharp.Parsers
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
 let lexeme = Lexing.LexBuffer<_>.LexemeString 
+let formatProvider = CultureInfo.InvariantCulture :> IFormatProvider
 }
 let hexagonal = ['a'-'f''A'-'F''0'-'9']
 let digit = ['0'-'9']
@@ -17,7 +18,8 @@ let number = '-'? digit* ('.' digit+)? exponential?
 
 rule token = parse
 | "\""          { parseString [] lexbuf }
-| number        { let value = lexeme lexbuf |> Double.Parse
+| number        { let lexbuf = lexeme lexbuf 
+                  let value = Double.Parse(lexbuf, formatProvider)
                   DOUBLE(value) }
 | "true"        { BOOL(true) }
 | "false"       { BOOL(false) }
