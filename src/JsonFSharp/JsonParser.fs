@@ -66,6 +66,11 @@ let toInstance<'T> json =
         else
             None
 
+    let (|RecordType|_|) (t : System.Type) =
+        if (Microsoft.FSharp.Reflection.FSharpType.IsRecord t) then
+            Some t
+        else None
+
     let (|ListType|_|) (t : System.Type) =
         match t with
         | x when not(x.IsGenericType) -> None
@@ -90,64 +95,60 @@ let toInstance<'T> json =
         | ([],_) -> Failure "Not enough elements"
 
     let converter = new Converter()
-    let rec coerceToType (targetType: System.Type) json =
-        if (targetType = typeof<JsonValue>) then 
-            json :> obj |> Success
-        else
-            let toObj value = changeType targetType value
+    let rec coerceToType (targetType: System.Type) (json:JsonValue) =
+        let toObj value = changeType targetType value
+        match targetType with
+        | x when x = typeof<JsonValue> -> json :> obj |> Success
+        | ListType t ->
             match json with
-            | JsonString x -> toObj x
-            | JsonNumber x -> toObj x
-            | JsonBool x -> toObj x
-            | JsonNull -> toObj null
             | JsonArray arr ->
-                match targetType with
-                | TupleType t ->
-                    let folder state targetType = 
-                        match state with
-                        | Failure x -> Failure x
-                        | Success (x,y) ->
-                            match y with
-                            | [] -> Failure "Not enough array elements"
-                            | y::z -> 
-                                coerceToType targetType y 
-                                >>= (fun b -> Success (b::x,z))
-                    FSharpType.GetTupleElements t
-                    |> Array.toList
-                    |> pairWith arr
-                    >>= bindList (fun (x,targetType) -> coerceToType targetType x)
-                    >>= (invokeCtor targetType)
-
-                | ListType t ->
-                    arr |> List.map (fun x -> 
-                            match coerceToType t x with
-                            | Failure f -> failwith "not supported yet"
-                            | Success s -> s)
-                    |> converter.changeListToType t 
-                | _ -> Failure "Not a generic list type"
-
+                arr |> List.map (fun x -> 
+                        match coerceToType t x with
+                        | Failure f -> failwith "not supported yet"
+                        | Success s -> s)
+                |> converter.changeListToType t 
+            | _ -> Failure "Expected a list"
+        | StringMap t -> 
+            match json with
+            | JsonObject obj ->
+                obj 
+                |> Map.toList 
+                |> bindList (fun (x,y) ->
+                    match y |> coerceToType t with
+                    | Success z -> Success (x,z)
+                    | Failure z -> Failure z)
+                >>= converter.listToTypedMap t
+            | _ -> Failure "Expected an object for a string map"
+        | RecordType t -> 
+            match json with
             | JsonObject(obj) ->
-                match targetType with
-                | StringMap t -> 
-                    obj 
-                    |> Map.toList 
-                    |> bindList (fun (x,y) ->
-                        match y |> coerceToType t with
-                        | Success z -> Success (x,z)
-                        | Failure z -> Failure z)
-                    >>= converter.listToTypedMap t
-                | _ -> 
-                    let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
-                        arg.Name
-                        |> obj.TryFind
-                        |> Result.FromOption (sprintf "could not find data for record value '%s'" arg.Name)
-                        >>= coerceToType arg.ParameterType
+                let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
+                    arg.Name
+                    |> obj.TryFind
+                    |> Result.FromOption (sprintf "could not find data for record value '%s'" arg.Name)
+                    >>= coerceToType arg.ParameterType
 
-                    let ctor = targetType.GetConstructors().Single()
-                    ctor.GetParameters() 
-                    |> Array.toList
-                    |> bindList getConstructorArgument
-                    >>= invokeCtor targetType
+                let ctor = targetType.GetConstructors().Single()
+                ctor.GetParameters() 
+                |> Array.toList
+                |> bindList getConstructorArgument
+                >>= invokeCtor targetType
+            | _ -> Failure "Json object expected"
+        | TupleType t ->
+            match json with
+            | JsonArray(arr) ->
+                FSharpType.GetTupleElements t
+                |> Array.toList
+                |> pairWith arr
+                >>= bindList (fun (x,targetType) -> coerceToType targetType x)
+                >>= (invokeCtor targetType)
+            | _ -> Failure "Json array expected for tuple type"
+        | _ -> match json with
+               | JsonString x -> toObj x
+               | JsonNumber x -> toObj x
+               | JsonBool x -> toObj x
+               | JsonNull -> toObj null
+               | _ -> Failure "Unexpected type"
 
     let targetType = typeof<'T>
     let mapType = typeof<Map<string,_>>
