@@ -13,6 +13,8 @@ module Helpers =
   type FooTypeWithTuple = { foo : int * int }
   type FooTypeWithIntList = { foo: int list }
   type FooTypeWithJsonValue = { foo : JsonValue }
+  type FooTypeWithJsonValueOption = { foo : JsonValue option }
+
   type ParentType = {
       child: FooTypeWithInt;
       bar: int
@@ -208,5 +210,20 @@ let specs =
                 |> jsonToObj<FooTypeWithJsonValue>
                 |> (fun x -> x.foo)
                 |> should (equal (JsonNumber 42.0))
+        ]
+
+        describe "Target type contains a JsonValue option property" [
+            it "is initialized with 'Some JsonValue' when a value exists" <| fun _ ->
+                """{ "foo": 42 }"""
+                |> stringToJson
+                |> jsonToObj<FooTypeWithJsonValueOption>
+                |> (fun x -> x.foo)
+                |> should (equal (Some (JsonNumber 42.0)))
+            it "is initialized with 'None' when no value exists" <| fun _ ->
+                """{ }"""
+                |> stringToJson
+                |> jsonToObj<FooTypeWithJsonValueOption>
+                |> (fun x -> x.foo)
+                |> should (equal (None))
         ]
     ]

@@ -99,6 +99,12 @@ let toInstance<'T> json =
         let toObj value = changeType targetType value
         match targetType with
         | x when x = typeof<JsonValue> -> json :> obj |> Success
+        | x when x = typeof<Option<JsonValue>> -> 
+            let result = 
+              match json with
+              | JsonNull -> None 
+              | _ -> (Some json) 
+            result :> obj |> Success
         | ListType t ->
             match json with
             | JsonArray arr ->
