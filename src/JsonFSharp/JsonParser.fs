@@ -123,11 +123,16 @@ let toInstance<'T> json =
             match json with
             | JsonObject(obj) ->
                 let getConstructorArgument (arg: System.Reflection.ParameterInfo) =
+                    let argType = arg.ParameterType
+                    let optionalArg = argType.IsGenericType && (argType.GetGenericTypeDefinition().Name.StartsWith "FSharpOption")
                     arg.Name
                     |> obj.TryFind
-                    |> Result.FromOption (sprintf "could not find data for record value '%s'" arg.Name)
+                    |> fun x ->
+                        match x, optionalArg with
+                        | Some x, _ -> x |> Success
+                        | None, true -> JsonNull |> Success
+                        | None, false -> Failure (sprintf "could not find data for record value '%s'" arg.Name)
                     >>= coerceToType arg.ParameterType
-
                 let ctor = targetType.GetConstructors().Single()
                 ctor.GetParameters() 
                 |> Array.toList

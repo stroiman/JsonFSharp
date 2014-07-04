@@ -44,6 +44,14 @@ open Helpers
 
 let specs = 
     describe "Type conversions" [
+        describe "target type is an option type" [
+            it "is initialized to 'None' when no value exists in the input" <| fun _ ->
+                let value =
+                    """{ }"""
+                    |> stringToJson
+                    |> jsonToObj<FooTypeWithIntOption>
+                value.foo.Should (equal None)
+        ]
         describe "primitive type conversions" [
             it "converts simple json types" <| fun _ ->
                 JsonNumber 42.0
