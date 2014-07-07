@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>JsonFSharp</id>
-    <version>0.4</version>
+    <version>0.5</version>
     <title>JsonF#</title>
     <authors>Peter Stroiman</authors>
     <owners>Peter Strøiman</owners>
