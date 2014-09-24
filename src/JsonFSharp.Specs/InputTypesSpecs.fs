@@ -1,6 +1,6 @@
 ﻿module InputTypesSpecs
-open FSpec.Core.Dsl
-open FSpec.Core.Matchers
+open FSpec.Dsl
+open FSpec.Matchers
 open JsonFSharp
 open JsonParser
 

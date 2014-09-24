@@ -1,13 +1,13 @@
 ﻿module Helpers
-open FSpec.Core.Dsl
-open FSpec.Core.Matchers
+open FSpec.Dsl
+open FSpec.Matchers
 open JsonFSharp
 open JsonParser
 
 let parseString = JsonInput.fromString >> parse
 
 let shouldEqualJson expected actual =
-    actual |> should equal (Success expected)
+    actual |> should (be.equalTo (Success expected))
 
 let shouldEqualString expected actual =
     actual |> shouldEqualJson (JsonString expected)

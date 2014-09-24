@@ -1,4 +1,4 @@
-﻿open FSpec.Core.TestDiscovery
+﻿open FSpec.TestDiscovery
 
 [<EntryPoint>]
 let main argv =

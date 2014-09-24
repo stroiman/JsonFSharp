@@ -1,7 +1,7 @@
 ﻿module TypeConversionSpec
 open System.Text.RegularExpressions
-open FSpec.Core.Dsl
-open FSpec.Core.MatchersV3
+open FSpec.Dsl
+open FSpec.Matchers
 open JsonFSharp
 open JsonParser
 

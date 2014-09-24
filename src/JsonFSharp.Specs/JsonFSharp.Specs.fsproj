@@ -36,8 +36,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSpec.Core">
-      <HintPath>..\packages\fspec.0.0.7\lib\net40\FSpec.Core.dll</HintPath>
+    <Reference Include="FSpec">
+      <HintPath>..\packages\FSpec.0.1.2\lib\net40\FSpec.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
