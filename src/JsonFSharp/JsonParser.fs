@@ -14,14 +14,15 @@ type JsonInput =
         static member fromStream input = StreamInput input
     
 let parse input =
-    let lexbuf = 
-        match input with
+    let createLexBuffer = function
         | StringInput str -> Lexing.LexBuffer<char>.FromString str
         | StreamInput str ->
             let reader = new StreamReader(str)
             Lexing.LexBuffer<char>.FromTextReader reader
     try
-        Parsers.start Lexer.token lexbuf
+        input 
+        |> createLexBuffer 
+        |> Parsers.start Lexer.token
     with
         | e -> Failure (e.ToString())
 
