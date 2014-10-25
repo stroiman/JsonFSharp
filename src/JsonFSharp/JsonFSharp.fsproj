@@ -57,17 +57,11 @@
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
-  <Target Name="GenerateParser">
-    <Exec Command="..\lib\powerpack\fsyacc parser.fsy -o Parser.fs --module JsonFSharp.Parsers" />
-  </Target>
-  <Target Name="GenerateLexer">
-    <Exec Command="..\lib\powerpack\fslex lexer.fsl -o Lexer.fs --unicode" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="AfterBuild">
   </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser">
+  <Target Name="BeforeBuild">
   </Target>
   -->
   <Import Project="..\packages\FsLexYacc\bin\FsLexYacc.targets" />
