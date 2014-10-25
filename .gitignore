@@ -12,3 +12,5 @@ _NCrunch*
 *.nupkg
 *.*~
 paket.exe
+Lexer.fs
+Parser.fs
