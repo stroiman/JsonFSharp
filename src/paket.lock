@@ -5,3 +5,7 @@ NUGET
       FsLexYacc.Runtime (>= 6.0.4)
     FsLexYacc.Runtime (6.0.4)
     fspec (0.2.2)
+    FSpec.MbUnitWrapper (0.2.2)
+      fspec (>= 0.2.2)
+      mbunit (>= 0)
+    mbunit (3.4.14.0)
