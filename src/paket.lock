@@ -1,1 +1,6 @@
-
+NUGET
+  remote: https://nuget.org/api/v2
+  specs:
+    FsLexYacc (6.0.4)
+      FsLexYacc.Runtime (>= 6.0.4)
+    FsLexYacc.Runtime (6.0.4)

@@ -6,7 +6,7 @@ open System.Globalization
 open JsonFSharp.Parsers
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-let lexeme = Lexing.LexBuffer<_>.LexemeString 
+let lexeme = LexBuffer<_>.LexemeString 
 let formatProvider = CultureInfo.InvariantCulture :> IFormatProvider
 
 # 12 "Lexer.fs"

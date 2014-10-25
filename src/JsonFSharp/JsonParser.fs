@@ -5,6 +5,7 @@ open JsonFSharp.Parsers
 open System.Linq
 open TwoTrack
 open Microsoft.FSharp.Reflection
+open Microsoft.FSharp.Text.Lexing
 
 type JsonInput =
     | StringInput of string
@@ -15,10 +16,10 @@ type JsonInput =
     
 let parse input =
     let createLexBuffer = function
-        | StringInput str -> Lexing.LexBuffer<char>.FromString str
+        | StringInput str -> LexBuffer<char>.FromString str
         | StreamInput str ->
             let reader = new StreamReader(str)
-            Lexing.LexBuffer<char>.FromTextReader reader
+            LexBuffer<char>.FromTextReader reader
     try
         input 
         |> createLexBuffer 
