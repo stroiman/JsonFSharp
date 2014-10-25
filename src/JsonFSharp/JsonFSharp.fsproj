@@ -46,13 +46,12 @@
     <FsYacc Include="Parser.fsy">
       <OtherFlags>--module JsonFSharp.Parsers</OtherFlags>
     </FsYacc>
-    <FsLex Include="Lexer.fsl" >
-      <OtherFlags>--unicode</OtherFlags> 
+    <FsLex Include="Lexer.fsl">
+      <OtherFlags>--unicode</OtherFlags>
     </FsLex>
     <Compile Include="Parser.fs" />
     <Compile Include="Lexer.fs" />
     <Compile Include="JsonParser.fs" />
-    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
