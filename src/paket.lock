@@ -4,3 +4,4 @@ NUGET
     FsLexYacc (6.0.4)
       FsLexYacc.Runtime (>= 6.0.4)
     FsLexYacc.Runtime (6.0.4)
+    fspec (0.2.2)
