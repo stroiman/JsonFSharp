@@ -43,8 +43,12 @@
   <ItemGroup>
     <None Include="Script.fsx" />
     <Compile Include="Types.fs" />
-    <None Include="Parser.fsy" />
-    <None Include="Lexer.fsl" />
+    <FsYacc Include="Parser.fsy">
+      <OtherFlags>--module JsonFSharp.Parsers</OtherFlags>
+    </FsYacc>
+    <FsLex Include="Lexer.fsl" >
+      <OtherFlags>--unicode</OtherFlags> 
+    </FsLex>
     <Compile Include="Parser.fs" />
     <Compile Include="Lexer.fs" />
     <Compile Include="JsonParser.fs" />
@@ -60,13 +64,14 @@
   <Target Name="GenerateLexer">
     <Exec Command="..\lib\powerpack\fslex lexer.fsl -o Lexer.fs --unicode" />
   </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser;GenerateLexer">
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="AfterBuild">
   </Target>
+  <Target Name="BeforeBuild" DependsOnTargets="GenerateParser">
+  </Target>
   -->
+  <Import Project="..\packages\FsLexYacc\bin\FsLexYacc.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
       <Choose>

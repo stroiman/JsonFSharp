@@ -1,4 +1,4 @@
-# 1 "lexer.fsl"
+# 1 "Lexer.fsl"
  
 module JsonFSharp.Lexer
 open System
@@ -146,74 +146,74 @@ and parseUnicode state (lexbuf : Microsoft.FSharp.Text.Lexing.LexBuffer<_>) = _f
 and _fslex_token  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 20 "lexer.fsl"
+# 20 "Lexer.fsl"
                                  parseString [] lexbuf 
 # 151 "Lexer.fs"
           )
   | 1 -> ( 
-# 21 "lexer.fsl"
+# 21 "Lexer.fsl"
                                  let lexbuf = lexeme lexbuf 
                                  let value = Double.Parse(lexbuf, formatProvider)
                                  DOUBLE(value) 
 # 158 "Lexer.fs"
           )
   | 2 -> ( 
-# 24 "lexer.fsl"
+# 24 "Lexer.fsl"
                                  BOOL(true) 
 # 163 "Lexer.fs"
           )
   | 3 -> ( 
-# 25 "lexer.fsl"
+# 25 "Lexer.fsl"
                                  BOOL(false) 
 # 168 "Lexer.fs"
           )
   | 4 -> ( 
-# 26 "lexer.fsl"
+# 26 "Lexer.fsl"
                                  NULL 
 # 173 "Lexer.fs"
           )
   | 5 -> ( 
-# 27 "lexer.fsl"
+# 27 "Lexer.fsl"
                                  LBRAC 
 # 178 "Lexer.fs"
           )
   | 6 -> ( 
-# 28 "lexer.fsl"
+# 28 "Lexer.fsl"
                                  RBRAC 
 # 183 "Lexer.fs"
           )
   | 7 -> ( 
-# 29 "lexer.fsl"
+# 29 "Lexer.fsl"
                                  LBRACE 
 # 188 "Lexer.fs"
           )
   | 8 -> ( 
-# 30 "lexer.fsl"
+# 30 "Lexer.fsl"
                                  RBRACE 
 # 193 "Lexer.fs"
           )
   | 9 -> ( 
-# 31 "lexer.fsl"
+# 31 "Lexer.fsl"
                                  COMMA 
 # 198 "Lexer.fs"
           )
   | 10 -> ( 
-# 32 "lexer.fsl"
+# 32 "Lexer.fsl"
                                  COLON 
 # 203 "Lexer.fs"
           )
   | 11 -> ( 
-# 33 "lexer.fsl"
+# 33 "Lexer.fsl"
                                  token lexbuf 
 # 208 "Lexer.fs"
           )
   | 12 -> ( 
-# 34 "lexer.fsl"
+# 34 "Lexer.fsl"
                                  token lexbuf 
 # 213 "Lexer.fs"
           )
   | 13 -> ( 
-# 36 "lexer.fsl"
+# 36 "Lexer.fsl"
                                 
                                    let exceptionString = System.String.Format("Unrecognized character at line {0} column {1}",
                                                                            lexbuf.EndPos.Line + 1,
@@ -223,7 +223,7 @@ and _fslex_token  _fslex_state lexbuf =
 # 223 "Lexer.fs"
           )
   | 14 -> ( 
-# 42 "lexer.fsl"
+# 42 "Lexer.fsl"
                          EOF 
 # 228 "Lexer.fs"
           )
@@ -232,18 +232,18 @@ and _fslex_token  _fslex_state lexbuf =
 and _fslex_parseString state _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 44 "lexer.fsl"
+# 44 "Lexer.fsl"
                                      let str = lexeme lexbuf
                                      parseString (str::state) lexbuf 
 # 238 "Lexer.fs"
           )
   | 1 -> ( 
-# 46 "lexer.fsl"
+# 46 "Lexer.fsl"
                                      parseEscapeCharacter state lexbuf 
 # 243 "Lexer.fs"
           )
   | 2 -> ( 
-# 47 "lexer.fsl"
+# 47 "Lexer.fsl"
                                      let str = state |> List.fold (fun a b -> b + a) ""
                                      STRING(str) 
 # 249 "Lexer.fs"
@@ -253,47 +253,47 @@ and _fslex_parseString state _fslex_state lexbuf =
 and _fslex_parseEscapeCharacter state _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 50 "lexer.fsl"
+# 50 "Lexer.fsl"
                                      parseString ("\""::state) lexbuf 
 # 258 "Lexer.fs"
           )
   | 1 -> ( 
-# 51 "lexer.fsl"
+# 51 "Lexer.fsl"
                                      parseString ("\\"::state) lexbuf 
 # 263 "Lexer.fs"
           )
   | 2 -> ( 
-# 52 "lexer.fsl"
+# 52 "Lexer.fsl"
                                      parseString ("/"::state) lexbuf 
 # 268 "Lexer.fs"
           )
   | 3 -> ( 
-# 53 "lexer.fsl"
+# 53 "Lexer.fsl"
                                      parseString ("\f"::state) lexbuf 
 # 273 "Lexer.fs"
           )
   | 4 -> ( 
-# 54 "lexer.fsl"
+# 54 "Lexer.fsl"
                                      parseString ("\b"::state) lexbuf 
 # 278 "Lexer.fs"
           )
   | 5 -> ( 
-# 55 "lexer.fsl"
+# 55 "Lexer.fsl"
                                      parseString ("\r"::state) lexbuf 
 # 283 "Lexer.fs"
           )
   | 6 -> ( 
-# 56 "lexer.fsl"
+# 56 "Lexer.fsl"
                                      parseString ("\n"::state) lexbuf 
 # 288 "Lexer.fs"
           )
   | 7 -> ( 
-# 57 "lexer.fsl"
+# 57 "Lexer.fsl"
                                      parseString ("\t"::state) lexbuf 
 # 293 "Lexer.fs"
           )
   | 8 -> ( 
-# 58 "lexer.fsl"
+# 58 "Lexer.fsl"
                                      parseUnicode state lexbuf 
 # 298 "Lexer.fs"
           )
@@ -302,7 +302,7 @@ and _fslex_parseEscapeCharacter state _fslex_state lexbuf =
 and _fslex_parseUnicode state _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 60 "lexer.fsl"
+# 60 "Lexer.fsl"
                                      let str = lexeme lexbuf
                                      let v = Int32.Parse(str, NumberStyles.HexNumber)
                                      let s = Char.ConvertFromUtf32(v)
@@ -310,12 +310,10 @@ and _fslex_parseUnicode state _fslex_state lexbuf =
 # 310 "Lexer.fs"
           )
   | 1 -> ( 
-# 64 "lexer.fsl"
+# 64 "Lexer.fsl"
                                      EXCEPTION "unrecognized unicode string" 
 # 315 "Lexer.fs"
           )
   | _ -> failwith "parseUnicode"
-
-# 65 "lexer.fsl"
 
 # 3000000 "Lexer.fs"

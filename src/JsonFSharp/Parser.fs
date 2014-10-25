@@ -3,7 +3,7 @@ module JsonFSharp.Parsers
 #nowarn "64";; // turn off warnings that type variables used in production annotations are instantiated to concrete type
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-# 1 "parser.fsy"
+# 1 "Parser.fsy"
 
 open JsonFSharp
 
@@ -163,10 +163,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 17 "parser.fsy"
+# 17 "Parser.fsy"
                                        Success _1 
                    )
-# 17 "parser.fsy"
+# 17 "Parser.fsy"
                  :  JsonFSharp.ParseResult ));
 # 171 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -174,10 +174,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 18 "parser.fsy"
+# 18 "Parser.fsy"
                                        Failure _1 
                    )
-# 18 "parser.fsy"
+# 18 "Parser.fsy"
                  :  JsonFSharp.ParseResult ));
 # 182 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -185,10 +185,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 21 "parser.fsy"
+# 21 "Parser.fsy"
                                        JsonString _1 
                    )
-# 21 "parser.fsy"
+# 21 "Parser.fsy"
                  : 'value));
 # 193 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -196,10 +196,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 22 "parser.fsy"
+# 22 "Parser.fsy"
                                        JsonNumber _1 
                    )
-# 22 "parser.fsy"
+# 22 "Parser.fsy"
                  : 'value));
 # 204 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -207,20 +207,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 23 "parser.fsy"
+# 23 "Parser.fsy"
                                        JsonBool _1 
                    )
-# 23 "parser.fsy"
+# 23 "Parser.fsy"
                  : 'value));
 # 215 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 24 "parser.fsy"
+# 24 "Parser.fsy"
                                        JsonNull 
                    )
-# 24 "parser.fsy"
+# 24 "Parser.fsy"
                  : 'value));
 # 225 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -228,10 +228,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 27 "parser.fsy"
+# 27 "Parser.fsy"
                                        JsonArray (_2 |> List.rev) 
                    )
-# 27 "parser.fsy"
+# 27 "Parser.fsy"
                  : 'value));
 # 236 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -239,20 +239,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 30 "parser.fsy"
+# 30 "Parser.fsy"
                                        JsonObject _2 
                    )
-# 30 "parser.fsy"
+# 30 "Parser.fsy"
                  : 'value));
 # 247 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 33 "parser.fsy"
+# 33 "Parser.fsy"
                                        [] 
                    )
-# 33 "parser.fsy"
+# 33 "Parser.fsy"
                  : 'arrayRev));
 # 257 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -260,10 +260,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 34 "parser.fsy"
+# 34 "Parser.fsy"
                                        [_1] 
                    )
-# 34 "parser.fsy"
+# 34 "Parser.fsy"
                  : 'arrayRev));
 # 268 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -272,10 +272,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 37 "parser.fsy"
+# 37 "Parser.fsy"
                                        _3::_1 
                    )
-# 37 "parser.fsy"
+# 37 "Parser.fsy"
                  : 'arrayRev));
 # 280 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -284,20 +284,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 42 "parser.fsy"
+# 42 "Parser.fsy"
                                        (_1,_3) 
                    )
-# 42 "parser.fsy"
+# 42 "Parser.fsy"
                  : 'property));
 # 292 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 45 "parser.fsy"
+# 45 "Parser.fsy"
                                        Map.empty 
                    )
-# 45 "parser.fsy"
+# 45 "Parser.fsy"
                  : 'properties));
 # 302 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -305,11 +305,11 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 46 "parser.fsy"
+# 46 "Parser.fsy"
                                        let (key,value) = _1
                                        Map.empty |> Map.add key value 
                    )
-# 46 "parser.fsy"
+# 46 "Parser.fsy"
                  : 'properties));
 # 314 "Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -318,11 +318,11 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 50 "parser.fsy"
+# 50 "Parser.fsy"
                                        let (key,value) = _3
                                        _1 |> Map.add key value 
                    )
-# 50 "parser.fsy"
+# 50 "Parser.fsy"
                  : 'properties));
 |]
 # 328 "Parser.fs"
