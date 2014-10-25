@@ -10,3 +10,4 @@ obj/
 _NCrunch*
 *.nupkg
 *.*~
+paket.exe
