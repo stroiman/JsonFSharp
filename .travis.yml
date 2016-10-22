@@ -1,10 +1,7 @@
 language: fsharp
 mono:
   - latest
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y ruby
 script:
-  - cd src && rake test
+  - bundle && bundle exec rake test
 
 
