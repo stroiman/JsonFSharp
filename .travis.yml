@@ -2,6 +2,6 @@ language: csharp
 mono:
   - latest
 script:
-  - bundle && bundle exec rake test
+  - bundle && bundle exec rake ci_build
 
 

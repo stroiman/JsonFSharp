@@ -20,3 +20,10 @@ task :pack => :test do
   sh "git commit -m \"bump to version #{v.to_s}\""
   sh "git push"
 end
+
+task :restore do
+  sh "mono paket.bootstrapper.exe"
+  sh "mono paket.exe restore"
+end
+
+task :ci_build => [:restore, :test]
