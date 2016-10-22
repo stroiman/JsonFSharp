@@ -15,5 +15,11 @@
     <summary>A simple JSON parser targeted specifically for F#</summary>
     <copyright>Copyright 2013</copyright>
     <tags>F# FSharp json</tags>
+    <dependencies>
+	    <dependency id="FsLexYacc.Runtime" version="6.0.4" />
+    </dependencies>
   </metadata>
+  <files>
+	  <file src="bin/Debug/JsonFSharp.dll" target="lib/net40" />
+  </files>
 </package>

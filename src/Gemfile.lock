@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    semver2 (3.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  semver2
+
+BUNDLED WITH
+   1.13.2

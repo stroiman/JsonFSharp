@@ -1,0 +1,14 @@
+require 'semver'
+v = SemVer.find
+
+task :build do
+  sh "xbuild JsonFSharp.sln"
+end
+
+task :test => [:build] do
+  sh "mono JsonFSharp.Specs/bin/Debug/JsonFSharp.Specs.exe"
+end
+
+task :pack => :test do
+  sh "nuget pack -Version #{v.format "%M.%m.%p%s%d"} JsonFSharp/JsonFSharp.nuspec"
+end
