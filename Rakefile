@@ -27,3 +27,4 @@ task :restore do
 end
 
 task :ci_build => [:restore, :test]
+task :default => :test
