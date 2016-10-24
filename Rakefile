@@ -10,6 +10,7 @@ task :test => [:build] do
 end
 
 task :pack => :test do
+  raise "Nuget api key not set!" unless ENV['nuget_apikey']
   sh "nuget pack -Version #{v.format "%M.%m.%p%s%d"} JsonFSharp/JsonFSharp.nuspec"
   sh "git tag #{v.to_s}"
   sh "git push --tags"
