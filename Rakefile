@@ -21,6 +21,14 @@ task :pack => :test do
   sh "git push"
 end
 
+task :increment_minor do
+  v.minor += 1
+  v.save
+  sh "git add .semver"
+  sh "git commit -m \"bump to version #{v.to_s}\""
+  sh "git push"
+end
+
 task :restore do
   sh "mono paket.bootstrapper.exe"
   sh "mono paket.exe restore"
