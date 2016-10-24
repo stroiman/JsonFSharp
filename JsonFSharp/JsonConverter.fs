@@ -62,7 +62,23 @@ let toInstance<'T> json =
 
     let invokeCtor (targetType : System.Type) args =
         let ctor = targetType.GetConstructors().Single()
+        printfn "Parameters: %A" (ctor.GetParameters())
         args |> List.toArray |> ctor.Invoke |> Success
+
+    let rec invokeTupleCtor (targetType : System.Type) (args:obj list) =
+        let rec iter (targetType : System.Type) (args:obj list) : obj =
+            let ctor = targetType.GetConstructors().Single()
+            let ctorParams = ctor.GetParameters() |> List.ofArray
+            let rec createArgs (args:obj list) (ctorParams:System.Reflection.ParameterInfo list) : obj list =
+                match (args,ctorParams) with
+                | x::[],y::[] -> [x]
+                | x::xs,y::[] -> let result : obj = iter y.ParameterType args
+                                 result::[]
+                | x::xs,y::ys -> x::(createArgs xs ys)
+            printfn "Parameters: %A" (ctor.GetParameters())
+            let a : obj list= createArgs args ctorParams
+            a |> List.toArray |> ctor.Invoke
+        iter targetType args |> Success
 
     let rec pairWith source target =
         match (source,target) with
@@ -128,9 +144,11 @@ let toInstance<'T> json =
             | JsonArray(arr) ->
                 FSharpType.GetTupleElements t
                 |> Array.toList
+                |> (fun s -> printfn "TUPLE ELMS: %A" s; s)
                 |> pairWith arr
+                |> (fun s -> printfn "PAIRED ELMS: %A" s; s)
                 >>= bindList (fun (x,targetType) -> coerceToType targetType x)
-                >>= (invokeCtor targetType)
+                >>= (invokeTupleCtor targetType)
             | _ -> Failure "Json array expected for tuple type"
         | _ -> match json with
                | JsonString x -> toObj x

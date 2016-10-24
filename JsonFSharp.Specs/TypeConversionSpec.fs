@@ -7,6 +7,7 @@ open JsonParser
 open JsonConverter
 
 module Helpers =
+  type FooLongTupleType = int * int * int * int * int * int * int * int * int
   type FooTypeWithString = { foo : string; }
   type FooTypeWithInt = { foo : int; }
   type FooTypeWithIntOption = { foo : int option; }
@@ -202,6 +203,23 @@ let specs =
                 |> jsonToObj<FooTypeWithTuple>
                 |> (fun x -> x.foo)
                 |> should (equal (42,43))
+        ]
+
+        describe "Target is a long tuple" [
+            it "Handles long tuples" <| fun _ ->
+                // Tuples with more than 8 elements are internally created as 
+                // nested tuples. This creates some problems.
+                """[1,2,3,4,5,6,7,8,9]"""
+                |> stringToJson
+                |> jsonToObj<FooLongTupleType>
+                |> should (equal (1,2,3,4,5,6,7,8,9))
+            it "Handles very long tuples" <| fun _ ->
+                // Tuples with more than 8 elements are internally created as 
+                // nested tuples. This creates some problems.
+                """[1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0]"""
+                |> stringToJson
+                |> jsonToObj<int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int>
+                |> should (equal (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0))
         ]
 
         describe "Target type contains a JsonValue property" [
