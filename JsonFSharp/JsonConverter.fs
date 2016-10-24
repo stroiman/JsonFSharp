@@ -62,7 +62,6 @@ let toInstance<'T> json =
 
     let invokeCtor (targetType : System.Type) args =
         let ctor = targetType.GetConstructors().Single()
-        printfn "Parameters: %A" (ctor.GetParameters())
         args |> List.toArray |> ctor.Invoke |> Success
 
     let rec invokeTupleCtor (targetType : System.Type) (args:obj list) =
@@ -75,7 +74,6 @@ let toInstance<'T> json =
                 | x::xs,y::[] -> let result : obj = iter y.ParameterType args
                                  result::[]
                 | x::xs,y::ys -> x::(createArgs xs ys)
-            printfn "Parameters: %A" (ctor.GetParameters())
             let a : obj list= createArgs args ctorParams
             a |> List.toArray |> ctor.Invoke
         iter targetType args |> Success
@@ -144,9 +142,7 @@ let toInstance<'T> json =
             | JsonArray(arr) ->
                 FSharpType.GetTupleElements t
                 |> Array.toList
-                |> (fun s -> printfn "TUPLE ELMS: %A" s; s)
                 |> pairWith arr
-                |> (fun s -> printfn "PAIRED ELMS: %A" s; s)
                 >>= bindList (fun (x,targetType) -> coerceToType targetType x)
                 >>= (invokeTupleCtor targetType)
             | _ -> Failure "Json array expected for tuple type"
