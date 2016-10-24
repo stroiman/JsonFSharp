@@ -70,9 +70,10 @@ let toInstance<'T> json =
             let ctorParams = ctor.GetParameters() |> List.ofArray
             let rec createArgs (args:obj list) (ctorParams:System.Reflection.ParameterInfo list) : obj list =
                 match (args,ctorParams) with
-                | x::[],y::[] -> [x]
-                | x::xs,y::[] -> let result : obj = iter y.ParameterType args
-                                 result::[]
+                | x::xs,y::[] -> if y.ParameterType.Name.StartsWith("Tuple") then
+                                     [iter y.ParameterType args]
+                                 else
+                                     [x]
                 | x::xs,y::ys -> x::(createArgs xs ys)
             let a : obj list= createArgs args ctorParams
             a |> List.toArray |> ctor.Invoke

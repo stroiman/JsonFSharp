@@ -209,10 +209,11 @@ let specs =
             it "Handles long tuples" <| fun _ ->
                 // Tuples with more than 8 elements are internally created as 
                 // nested tuples. This creates some problems.
-                """[1,2,3,4,5,6,7,8,9]"""
+                """[1,2,3,4,5,6,7,8]"""
                 |> stringToJson
-                |> jsonToObj<FooLongTupleType>
-                |> should (equal (1,2,3,4,5,6,7,8,9))
+                |> jsonToObj<int*int*int*int*int*int*int*int>
+                |> should (equal (1,2,3,4,5,6,7,8))
+
             it "Handles very long tuples" <| fun _ ->
                 // Tuples with more than 8 elements are internally created as 
                 // nested tuples. This creates some problems.
